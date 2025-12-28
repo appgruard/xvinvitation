@@ -7,8 +7,12 @@ import dress7 from "@assets/../attached_assets/7_20251228_174214_0006_1766958307
 import dress8 from "@assets/../attached_assets/8_20251228_174214_0007_1766958307700.png";
 import dress9 from "@assets/../attached_assets/9_20251228_174214_0008_1766958307785.png";
 import dress10 from "@assets/../attached_assets/10_20251228_174214_0009_1766958307823.png";
-import shirtImage from "../../assets/new_shirt.png";
-import pantsImage from "../../assets/kindpng_625835_1766953774737.png";
+
+import man1 from "@assets/../attached_assets/12_20251228_180305_0000_1766959437680.png";
+import man2 from "@assets/../attached_assets/13_20251228_180305_0001_1766959437731.png";
+import man3 from "@assets/../attached_assets/14_20251228_180305_0002_1766959437748.png";
+import man4 from "@assets/../attached_assets/15_20251228_180305_0003_1766959437556.png";
+import man5 from "@assets/../attached_assets/16_20251228_180305_0004_1766959437651.png";
 
 export default function DressCode() {
   const forbiddenColors = [
@@ -19,6 +23,7 @@ export default function DressCode() {
   ];
 
   const womenImages = [dress1, dress2, dress3, dress5, dress7, dress8, dress9, dress10];
+  const menImages = [man1, man2, man3, man4, man5];
 
   return (
     <section id="dress-code" className="w-full flex justify-center py-12 px-4">
@@ -43,13 +48,12 @@ export default function DressCode() {
           <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center w-full h-full justify-between">
             <div className="w-full flex flex-col items-center">
               <h4 className="font-bold text-rose-800 font-sans uppercase text-sm tracking-widest mb-6 border-b border-rose-100 pb-2 w-full text-center">Hombres</h4>
-              <div className="flex gap-4 mb-8 h-80 items-center justify-center w-full">
-                <div className="w-1/2 h-full overflow-hidden rounded-xl bg-rose-50/50 p-4 flex items-center justify-center border border-rose-50 shadow-sm">
-                  <img src={shirtImage} alt="Referencia camisa" className="max-w-full max-h-full object-contain" />
-                </div>
-                <div className="w-1/2 h-full overflow-hidden rounded-xl bg-rose-50/50 p-4 flex items-center justify-center border border-rose-50 shadow-sm">
-                  <img src={pantsImage} alt="Referencia pantalón" className="max-w-full max-h-full object-contain" />
-                </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8 w-full">
+                {menImages.map((img, idx) => (
+                  <div key={idx} className="aspect-[3/5] overflow-hidden rounded-lg bg-rose-50/50 p-1 flex items-center justify-center border border-rose-50 hover:border-rose-200 transition-colors shadow-sm">
+                    <img src={img} alt={`Referencia hombre ${idx + 1}`} className="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300" />
+                  </div>
+                ))}
               </div>
             </div>
             <p className="text-gray-600 font-serif italic text-lg text-center leading-relaxed">Camisa y pantalón de vestir</p>
