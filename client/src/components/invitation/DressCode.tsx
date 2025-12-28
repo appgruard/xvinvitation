@@ -2,7 +2,6 @@ import { XCircle } from "lucide-react";
 
 export default function DressCode() {
   const forbiddenColors = [
-    { color: "#FFFFFF", label: "Blanco" },
     { color: "#FEE7F0", label: "Cuisse de nymphe" },
     { color: "#F4A6C8", label: "Cuisse de nymphe émue" },
     { color: "#FEBFD2", label: "Rose dragée" },
