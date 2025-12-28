@@ -29,14 +29,11 @@ export default function DressCode() {
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Women Section */}
         <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center">
-          <div className="flex gap-2 mb-6 h-64 items-center justify-center">
-            <div className="w-32 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
+          <div className="flex gap-4 mb-6 h-64 items-center justify-center">
+            <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
               <img src={dressImage1} alt="Referencia mujer 1" className="max-w-full max-h-full object-contain" />
             </div>
-            <div className="w-32 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
-              <img src={dressImage2} alt="Referencia mujer 2" className="max-w-full max-h-full object-contain" />
-            </div>
-            <div className="w-32 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
+            <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
               <img src={dressImage3} alt="Referencia mujer 3" className="max-w-full max-h-full object-contain" />
             </div>
           </div>
