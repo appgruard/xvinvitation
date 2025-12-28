@@ -2,7 +2,7 @@ import { XCircle, CheckCircle2 } from "lucide-react";
 import dressImage1 from "../../assets/Clothing-PNG-Photo_1766953659008.png";
 import dressImage2 from "../../assets/elegant_long_pastel__3c9d3833.jpg";
 import dressImage3 from "../../assets/elegant_long_pastel_evening_dress.png";
-import shirtImage from "../../assets/formal-shirt-formal-blue-buttoned-shirt-YgH67rKy_1766953659102.jpg";
+import shirtImage from "../../assets/new_shirt.png";
 import pantsImage from "../../assets/kindpng_625835_1766953774737.png";
 
 export default function DressCode() {
@@ -23,12 +23,12 @@ export default function DressCode() {
   ];
 
   return (
-    <div className="text-center space-y-12 max-w-6xl mx-auto">
+    <div className="text-center space-y-12 max-w-6xl mx-auto flex flex-col items-center">
       <h2 className="font-display text-4xl text-rose-900">Código de Vestimenta</h2>
       
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid lg:grid-cols-2 gap-8 w-full place-items-center">
         {/* Women Section */}
-        <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center">
+        <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center w-full max-w-md">
           <div className="flex gap-4 mb-6 h-64 items-center justify-center">
             <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
               <img src={dressImage1} alt="Referencia mujer 1" className="max-w-full max-h-full object-contain" />
@@ -38,25 +38,25 @@ export default function DressCode() {
             </div>
           </div>
           <h4 className="font-bold text-rose-800 font-sans uppercase text-sm tracking-widest mb-2">Mujeres</h4>
-          <p className="text-gray-600 font-serif italic text-lg">Vestido largo o cóctel elegante</p>
+          <p className="text-gray-600 font-serif italic text-lg text-center">Vestido largo o cóctel elegante</p>
         </div>
 
         {/* Men Section */}
-        <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center">
+        <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center w-full max-w-md">
           <div className="flex gap-4 mb-6 h-64 items-center justify-center">
-            <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-4 flex items-center justify-center">
-              <img src={shirtImage} alt="Referencia camisa" className="max-w-full max-h-full object-contain mix-blend-multiply" />
+            <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
+              <img src={shirtImage} alt="Referencia camisa" className="max-w-full max-h-full object-contain" />
             </div>
-            <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-4 flex items-center justify-center">
+            <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
               <img src={pantsImage} alt="Referencia pantalón" className="max-w-full max-h-full object-contain" />
             </div>
           </div>
           <h4 className="font-bold text-rose-800 font-sans uppercase text-sm tracking-widest mb-2">Hombres</h4>
-          <p className="text-gray-600 font-serif italic text-lg">Camisa y pantalón de vestir</p>
+          <p className="text-gray-600 font-serif italic text-lg text-center">Camisa y pantalón de vestir</p>
         </div>
       </div>
 
-      <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm space-y-10">
+      <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm space-y-10 w-full">
         {/* Allowed Colors */}
         <div>
           <div className="flex items-center justify-center gap-2 mb-6 text-emerald-700 font-bold">
