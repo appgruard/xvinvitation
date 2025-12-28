@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { CheckCircle2, Download } from "lucide-react";
-import QRCode from "qrcode.react";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function RSVP({ guest }: { guest: Guest }) {
   const { updateGuestStatus } = useStore();
@@ -65,7 +65,7 @@ export default function RSVP({ guest }: { guest: Guest }) {
             <div className="bg-white p-8 rounded-xl shadow-md border border-rose-100 max-w-sm mx-auto">
               <p className="text-sm text-gray-500 mb-4 uppercase tracking-widest font-sans">Tu código de acceso</p>
               <div ref={qrRef} className="flex justify-center mb-6 p-4 bg-white rounded-lg">
-                <QRCode 
+                <QRCodeSVG 
                   value={qrData} 
                   size={200} 
                   level="H" 
