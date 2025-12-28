@@ -1,0 +1,46 @@
+import { useStore } from "@/lib/store";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+
+export default function Details({ guest }: { guest: any }) {
+  const { eventDetails } = useStore();
+  const date = new Date(eventDetails.date);
+
+  return (
+    <div className="text-center max-w-3xl mx-auto space-y-8 px-6">
+      <div className="space-y-4">
+        <h2 className="font-script text-5xl md:text-6xl text-rose-500">Con la bendición de Dios</h2>
+        <p className="font-serif text-xl text-gray-600">
+          y el amor de mis padres
+        </p>
+      </div>
+
+      <div className="py-8 border-y border-rose-200 my-8">
+        <p className="font-sans text-lg text-gray-700 leading-relaxed italic">
+          "Hay momentos en la vida que imaginamos, soñamos y esperamos. 
+          Hoy, ese sueño se hace realidad y quiero compartirlo contigo."
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <p className="font-serif text-2xl text-rose-800 uppercase tracking-widest">
+          {format(date, "EEEE d 'de' MMMM", { locale: es })}
+        </p>
+        <div className="text-4xl font-display text-gray-800">
+          {format(date, "yyyy")}
+        </div>
+        <p className="font-sans text-xl text-rose-500">
+          {format(date, "h:mm aa")}
+        </p>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-rose-100 max-w-md mx-auto mt-8">
+        <h3 className="font-serif text-xl text-rose-900 mb-2">Notas Importantes</h3>
+        <ul className="text-sm text-gray-600 space-y-2 font-sans">
+          <li>✨ Recepción personal e intransferible.</li>
+          <li>🚫 No niños. Agradecemos su comprensión.</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
