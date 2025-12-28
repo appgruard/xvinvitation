@@ -12,7 +12,9 @@ export default function Hero({ guestName }: { guestName: string }) {
           alt="María José" 
           fetchPriority="high"
           loading="eager"
+          decoding="async"
           className="w-full h-full object-cover object-top"
+          style={{ contentVisibility: 'auto' }}
         />
       </div>
 
