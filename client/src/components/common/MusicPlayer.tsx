@@ -19,13 +19,14 @@ export function MusicPlayer() {
   }, []);
 
   const togglePlay = () => {
-    if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-        setPlaying(true);
-      } else {
-        audioRef.current.pause();
+    const audio = audioRef.current;
+    if (audio) {
+      if (playing) {
+        audio.pause();
         setPlaying(false);
+      } else {
+        audio.play().catch(error => console.error("Error playing audio:", error));
+        setPlaying(true);
       }
     }
   };
