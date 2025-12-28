@@ -92,7 +92,13 @@ export default function RSVP({ guest }: { guest: Guest }) {
           </div>
         )}
 
-        <p className="mt-8 text-sm text-gray-400">Si necesitas cambiar tu respuesta, contacta a los organizadores.</p>
+        <p className="mt-8 text-sm text-gray-500 bg-rose-50 p-4 rounded-lg border border-rose-100">
+          ¿Tienes dudas o necesitas cambiar tu respuesta? <br />
+          Comunícate por llamada o WhatsApp al: <br />
+          <a href="https://wa.me/18498171236" className="font-bold text-rose-700 hover:underline">
+            +1 (849) 817-1236
+          </a>
+        </p>
       </div>
     );
   }
@@ -103,7 +109,7 @@ export default function RSVP({ guest }: { guest: Guest }) {
       
       <div className="bg-white p-8 rounded-xl shadow-lg border-t-4 border-rose-400">
         <p className="mb-8 font-serif text-lg text-gray-700">
-          Hola <span className="font-bold text-rose-600">{guest.name}</span>, por favor confírmanos tu asistencia antes del 10 de Enero.
+          Hola <span className="font-bold text-rose-600">{guest.name}</span>, por favor confírmanos tu asistencia antes del 15 de Enero.
         </p>
 
         <div className="space-y-8 text-left max-w-sm mx-auto">
@@ -147,6 +153,14 @@ export default function RSVP({ guest }: { guest: Guest }) {
             Enviar Confirmación
           </Button>
         </div>
+
+        <p className="mt-12 text-sm text-gray-500 bg-rose-50 p-4 rounded-lg border border-rose-100 text-center">
+          ¿Tienes dudas o necesitas cambiar tu respuesta? <br />
+          Comunícate por llamada o WhatsApp al: <br />
+          <a href="https://wa.me/18498171236" className="font-bold text-rose-700 hover:underline">
+            +1 (849) 817-1236
+          </a>
+        </p>
       </div>
     </div>
   );
