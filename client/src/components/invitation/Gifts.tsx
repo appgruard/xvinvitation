@@ -72,7 +72,7 @@ export default function Gifts() {
           <DialogTrigger asChild>
             <Button variant="outline" className="w-full py-8 border-2 border-rose-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 text-rose-600 flex flex-col gap-2 h-auto">
               <Gift className="w-6 h-6" />
-              <span className="font-serif text-lg">Regalo en Efectivo</span>
+              <span className="font-serif text-lg">Regalo en Efectivo o Transferencia</span>
               <span className="font-sans text-xs text-gray-400 font-normal">Clic para ver datos bancarios</span>
             </Button>
           </DialogTrigger>

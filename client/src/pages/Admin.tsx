@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Copy, Plus } from "lucide-react";
+import { Copy, Plus, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 
@@ -74,6 +74,29 @@ export default function Admin() {
     const link = `${window.location.origin}/invitacion/${invitationId}`;
     navigator.clipboard.writeText(link);
     alert("Enlace copiado");
+  };
+
+  const handleDeleteGuest = async (guestId: string) => {
+    if (!confirm("¿Estás seguro de que deseas eliminar este invitado? Esta acción no se puede deshacer.")) {
+      return;
+    }
+    
+    try {
+      const res = await fetch(`/api/admin/guests/${guestId}`, {
+        method: "DELETE",
+      });
+      
+      if (res.ok) {
+        alert("Invitado eliminado correctamente");
+        loadData();
+      } else {
+        const error = await res.json();
+        alert("Error al eliminar: " + (error.message || "Error desconocido"));
+      }
+    } catch (error) {
+      console.error("Error deleting guest:", error);
+      alert("Error de conexión al intentar eliminar");
+    }
   };
 
   if (!isAuthenticated) {
@@ -186,9 +209,12 @@ export default function Admin() {
                         </span>
                       </TableCell>
                       <TableCell>{conf ? `${conf.seatsConfirmed} / ${guest.maxSeats}` : `- / ${guest.maxSeats}`}</TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right space-x-2">
                         <Button size="sm" variant="ghost" onClick={() => copyLink(guest.invitationId)}>
                           <Copy className="w-4 h-4 mr-2" /> Copiar
+                        </Button>
+                        <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => handleDeleteGuest(guest.id)}>
+                          <Trash2 className="w-4 h-4 mr-2" /> Eliminar
                         </Button>
                       </TableCell>
                     </TableRow>
