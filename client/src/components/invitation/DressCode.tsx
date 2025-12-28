@@ -1,12 +1,12 @@
 import { XCircle } from "lucide-react";
-import dress1 from "../../attached_assets/1_20251228_174214_0000_1766958307849.png";
-import dress2 from "../../attached_assets/2_20251228_174214_0001_1766958307885.png";
-import dress3 from "../../attached_assets/3_20251228_174214_0002_1766958307910.png";
-import dress5 from "../../attached_assets/5_20251228_174214_0004_1766958307957.png";
-import dress7 from "../../attached_assets/7_20251228_174214_0006_1766958307938.png";
-import dress8 from "../../attached_assets/8_20251228_174214_0007_1766958307700.png";
-import dress9 from "../../attached_assets/9_20251228_174214_0008_1766958307785.png";
-import dress10 from "../../attached_assets/10_20251228_174214_0009_1766958307823.png";
+import dress1 from "../../../attached_assets/1_20251228_174214_0000_1766958307849.png";
+import dress2 from "../../../attached_assets/2_20251228_174214_0001_1766958307885.png";
+import dress3 from "../../../attached_assets/3_20251228_174214_0002_1766958307910.png";
+import dress5 from "../../../attached_assets/5_20251228_174214_0004_1766958307957.png";
+import dress7 from "../../../attached_assets/7_20251228_174214_0006_1766958307938.png";
+import dress8 from "../../../attached_assets/8_20251228_174214_0007_1766958307700.png";
+import dress9 from "../../../attached_assets/9_20251228_174214_0008_1766958307785.png";
+import dress10 from "../../../attached_assets/10_20251228_174214_0009_1766958307823.png";
 import shirtImage from "../../assets/new_shirt.png";
 import pantsImage from "../../assets/kindpng_625835_1766953774737.png";
 
