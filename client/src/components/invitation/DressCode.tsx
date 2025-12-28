@@ -23,18 +23,18 @@ export default function DressCode() {
   ];
 
   return (
-    <section id="dress-code" className="w-full flex justify-center py-12">
-      <div className="text-center space-y-12 max-w-6xl w-full flex flex-col items-center px-4">
-        <h2 className="font-display text-4xl text-rose-900 w-full text-center">Código de Vestimenta</h2>
+    <section id="dress-code" className="w-full flex justify-center py-12 px-4">
+      <div className="text-center space-y-12 w-full max-w-4xl mx-auto flex flex-col items-center">
+        <h2 className="font-display text-4xl text-rose-900 w-full">Código de Vestimenta</h2>
         
-        <div className="grid lg:grid-cols-2 gap-8 w-full justify-items-center">
+        <div className="grid md:grid-cols-2 gap-8 w-full justify-center">
           {/* Women Section */}
-          <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center w-full max-w-md">
+          <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center w-full">
             <div className="flex gap-4 mb-6 h-64 items-center justify-center w-full">
-              <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
+              <div className="w-1/2 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
                 <img src={dressImage1} alt="Referencia mujer 1" className="max-w-full max-h-full object-contain" />
               </div>
-              <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
+              <div className="w-1/2 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
                 <img src={dressImage3} alt="Referencia mujer 3" className="max-w-full max-h-full object-contain" />
               </div>
             </div>
@@ -43,12 +43,12 @@ export default function DressCode() {
           </div>
 
           {/* Men Section */}
-          <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center w-full max-w-md">
+          <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-rose-100 backdrop-blur-sm flex flex-col items-center w-full">
             <div className="flex gap-4 mb-6 h-64 items-center justify-center w-full">
-              <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
+              <div className="w-1/2 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
                 <img src={shirtImage} alt="Referencia camisa" className="max-w-full max-h-full object-contain" />
               </div>
-              <div className="w-40 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
+              <div className="w-1/2 h-full overflow-hidden rounded-xl bg-rose-50/50 p-2 flex items-center justify-center">
                 <img src={pantsImage} alt="Referencia pantalón" className="max-w-full max-h-full object-contain" />
               </div>
             </div>
