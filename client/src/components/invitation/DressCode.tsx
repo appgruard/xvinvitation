@@ -13,6 +13,7 @@ import man2 from "@assets/../attached_assets/13_20251228_180305_0001_17669594377
 import man3 from "@assets/../attached_assets/14_20251228_180305_0002_1766959437748.png";
 import man4 from "@assets/../attached_assets/15_20251228_180305_0003_1766959437556.png";
 import man5 from "@assets/../attached_assets/16_20251228_180305_0004_1766959437651.png";
+import man6 from "@assets/../attached_assets/20251228_180846_0000_1766959745331.png";
 
 export default function DressCode() {
   const forbiddenColors = [
@@ -23,7 +24,7 @@ export default function DressCode() {
   ];
 
   const womenImages = [dress1, dress2, dress3, dress5, dress7, dress8, dress9, dress10];
-  const menImages = [man1, man2, man3, man4, man5];
+  const menImages = [man1, man2, man3, man4, man5, man6];
 
   return (
     <section id="dress-code" className="w-full flex justify-center py-12 px-4">
