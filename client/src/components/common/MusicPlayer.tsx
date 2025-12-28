@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import musicFile from '../../assets/Veo_en_ti_la_luz_Rapunzel_Karaoke_1766949643106.mp3';
@@ -17,35 +17,49 @@ export function MusicPlayer() {
       globalAudio.volume = 0.3;
     }
 
-    // Update local state based on global audio status
-    setPlaying(!globalAudio.paused);
-
-    // Auto-play attempt on mount
-    const playAttempt = () => {
-      globalAudio?.play().then(() => {
-        setPlaying(true);
-      }).catch(() => {
-        setPlaying(false);
-      });
+    const updateState = () => {
+      if (globalAudio) {
+        setPlaying(!globalAudio.paused);
+      }
     };
 
-    playAttempt();
+    globalAudio.addEventListener('play', updateState);
+    globalAudio.addEventListener('pause', updateState);
+    globalAudio.addEventListener('playing', updateState);
+    globalAudio.addEventListener('waiting', updateState);
+
+    // Initial check
+    setPlaying(!globalAudio.paused);
+
+    // Stop all other audio elements that might be playing
+    const allAudios = document.querySelectorAll('audio');
+    allAudios.forEach(a => {
+      if (a !== globalAudio) {
+        a.pause();
+        a.src = "";
+        a.remove();
+      }
+    });
 
     return () => {
-      // We don't pause here to allow music to continue during navigation
-      // unless the component is truly being destroyed or we want to stop it
+      if (globalAudio) {
+        globalAudio.removeEventListener('play', updateState);
+        globalAudio.removeEventListener('pause', updateState);
+        globalAudio.removeEventListener('playing', updateState);
+        globalAudio.removeEventListener('waiting', updateState);
+      }
     };
   }, []);
 
   const togglePlay = () => {
     if (!globalAudio) return;
 
-    if (playing) {
+    if (!globalAudio.paused) {
       globalAudio.pause();
-      setPlaying(false);
+      globalAudio.muted = true;
     } else {
+      globalAudio.muted = false;
       globalAudio.play().catch(console.error);
-      setPlaying(true);
     }
   };
 
