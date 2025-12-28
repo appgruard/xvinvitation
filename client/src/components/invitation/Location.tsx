@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react";
 
 export default function Location() {
   const { eventDetails } = useStore();
+  if (!eventDetails) return null;
 
   return (
     <div className="text-center space-y-8">

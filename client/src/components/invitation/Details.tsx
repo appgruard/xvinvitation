@@ -4,6 +4,7 @@ import { es } from "date-fns/locale";
 
 export default function Details({ guest }: { guest: any }) {
   const { eventDetails } = useStore();
+  if (!eventDetails) return null;
   const date = new Date(eventDetails.date);
 
   return (

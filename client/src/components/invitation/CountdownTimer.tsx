@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
 import { useStore } from "@/lib/store";
 
-export default function CountdownTimer() {
-  const { eventDetails } = useStore();
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  function calculateTimeLeft() {
-    const difference = +new Date(eventDetails.date) - +new Date();
+function calculateTimeLeft(date: string) {
+  const difference = +new Date(date) - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {
@@ -17,15 +13,22 @@ export default function CountdownTimer() {
         segundos: Math.floor((difference / 1000) % 60),
       };
     }
-    return timeLeft;
-  }
+  return timeLeft;
+}
+
+export default function CountdownTimer() {
+  const { eventDetails } = useStore();
+  
+  if (!eventDetails) return null;
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(eventDetails.date));
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
+      setTimeLeft(calculateTimeLeft(eventDetails.date));
     }, 1000);
     return () => clearTimeout(timer);
-  });
+  }, [eventDetails.date]);
 
   const timerComponents = Object.keys(timeLeft).map((interval) => {
     // @ts-ignore

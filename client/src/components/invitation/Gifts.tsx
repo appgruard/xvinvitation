@@ -1,5 +1,5 @@
 import { useStore } from "@/lib/store";
-import { Gift, ShoppingBag, Gem, CreditCard, Copy, Check } from "lucide-react";
+import { Gift, ShoppingBag, Gem, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
 
 export default function Gifts() {
   const { eventDetails } = useStore();
+  if (!eventDetails) return null;
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {

@@ -14,14 +14,20 @@ import { CheckCircle2, Download } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 
 export default function RSVP({ guest }: { guest: Guest }) {
-  const { updateGuestStatus } = useStore();
+  const { submitConfirmation } = useStore();
   const [status, setStatus] = useState<"confirmed" | "declined" | "pending">(guest.status);
   const [seats, setSeats] = useState<string>(guest.confirmedSeats > 0 ? guest.confirmedSeats.toString() : guest.maxSeats.toString());
   const [isSubmitted, setIsSubmitted] = useState(false);
   const qrRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = () => {
-    updateGuestStatus(guest.id, status, status === "confirmed" ? parseInt(seats) : 0);
+  const handleSubmit = async () => {
+    const qrData = {
+      id: guest.id,
+      name: guest.name,
+      seats: parseInt(seats),
+      timestamp: new Date().toISOString()
+    };
+    await submitConfirmation(guest.id, status as "confirmed" | "declined", status === "confirmed" ? parseInt(seats) : 0, qrData);
     setIsSubmitted(true);
   };
 

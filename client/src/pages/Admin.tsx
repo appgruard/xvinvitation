@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useStore, Guest } from "@/lib/store";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,35 +15,64 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Copy, Plus, Settings, Users, Calendar } from "lucide-react";
-import { format } from "date-fns";
+import { Copy, Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 
 export default function Admin() {
-  const store = useStore();
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [newGuest, setNewGuest] = useState({ name: "", maxSeats: 2 });
+  const [guests, setGuests] = useState<any[]>([]);
+  const [confirmations, setConfirmations] = useState<any[]>([]);
 
   const handleLogin = () => {
-    if (password === store.adminPassword) {
+    if (password === "admin") {
       setIsAuthenticated(true);
+      loadData();
     } else {
       alert("Contraseña incorrecta");
     }
   };
 
-  const handleAddGuest = () => {
-    const id = "inv-" + Math.random().toString(36).substr(2, 9);
-    store.addGuest({ id, name: newGuest.name, maxSeats: newGuest.maxSeats });
-    setNewGuest({ name: "", maxSeats: 2 });
+  const loadData = async () => {
+    try {
+      const guestsRes = await fetch("/api/admin/guests");
+      const confsRes = await fetch("/api/admin/confirmations");
+      if (guestsRes.ok) setGuests(await guestsRes.json());
+      if (confsRes.ok) setConfirmations(await confsRes.json());
+    } catch (error) {
+      console.error("Error loading data:", error);
+    }
   };
 
-  const copyLink = (id: string) => {
-    const link = store.generateGuestLink(id);
+  const handleAddGuest = async () => {
+    if (!newGuest.name || newGuest.maxSeats < 1) {
+      alert("Por favor completa los campos");
+      return;
+    }
+    try {
+      const res = await fetch("/api/admin/guests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newGuest)
+      });
+      if (res.ok) {
+        const guest = await res.json();
+        navigator.clipboard.writeText(guest.invitationLink);
+        alert("Invitado creado. Enlace copiado: " + guest.invitationLink);
+        setNewGuest({ name: "", maxSeats: 2 });
+        loadData();
+      }
+    } catch (error) {
+      console.error("Error creating guest:", error);
+    }
+  };
+
+  const copyLink = (invitationId: string) => {
+    const link = `${window.location.origin}/invitacion/${invitationId}`;
     navigator.clipboard.writeText(link);
-    alert("Enlace copiado: " + link);
+    alert("Enlace copiado");
   };
 
   if (!isAuthenticated) {
@@ -68,9 +96,9 @@ export default function Admin() {
     );
   }
 
-  const totalGuests = store.guests.length;
-  const confirmedGuests = store.guests.filter(g => g.status === "confirmed").length;
-  const totalSeatsConfirmed = store.guests.reduce((acc, curr) => acc + (curr.confirmedSeats || 0), 0);
+  const totalGuests = guests.length;
+  const confirmedGuests = confirmations.filter(c => c.status === 'confirmed').length;
+  const totalSeatsConfirmed = confirmations.reduce((acc: number, c: any) => acc + (c.seatsConfirmed || 0), 0);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 font-sans">
@@ -84,7 +112,6 @@ export default function Admin() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Invitaciones</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{totalGuests}</div>
@@ -93,7 +120,6 @@ export default function Admin() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Confirmaciones</CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{confirmedGuests}</div>
@@ -102,7 +128,6 @@ export default function Admin() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Asientos Ocupados</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{totalSeatsConfirmed}</div>
@@ -146,54 +171,33 @@ export default function Admin() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {store.guests.map((guest) => (
-                  <TableRow key={guest.id}>
-                    <TableCell className="font-medium">{guest.name}</TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        guest.status === 'confirmed' ? 'bg-green-100 text-green-800' : 
-                        guest.status === 'declined' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {guest.status === 'confirmed' ? 'Confirmado' : guest.status === 'declined' ? 'Declinado' : 'Pendiente'}
-                      </span>
-                    </TableCell>
-                    <TableCell>{guest.status === 'confirmed' ? `${guest.confirmedSeats} / ${guest.maxSeats}` : `- / ${guest.maxSeats}`}</TableCell>
-                    <TableCell className="text-right">
-                      <Button size="sm" variant="ghost" onClick={() => copyLink(guest.id)}>
-                        <Copy className="w-4 h-4 mr-2" /> Copiar Enlace
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {guests.map((guest) => {
+                  const conf = confirmations.find(c => c.guestId === guest.id);
+                  return (
+                    <TableRow key={guest.id}>
+                      <TableCell className="font-medium">{guest.name}</TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          guest.status === 'confirmed' ? 'bg-green-100 text-green-800' : 
+                          guest.status === 'declined' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {guest.status === 'confirmed' ? 'Confirmado' : guest.status === 'declined' ? 'Declinado' : 'Pendiente'}
+                        </span>
+                      </TableCell>
+                      <TableCell>{conf ? `${conf.seatsConfirmed} / ${guest.maxSeats}` : `- / ${guest.maxSeats}`}</TableCell>
+                      <TableCell className="text-right">
+                        <Button size="sm" variant="ghost" onClick={() => copyLink(guest.invitationId)}>
+                          <Copy className="w-4 h-4 mr-2" /> Copiar
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
-        
-        <div className="mt-8 p-4 bg-white rounded-lg border text-sm text-gray-500">
-           <p>Configuración rápida: Fecha del evento: {format(new Date(store.eventDetails.date), "dd/MM/yyyy HH:mm")}</p>
-        </div>
       </div>
     </div>
   );
 }
-
-function CheckCircle(props: any) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-        <polyline points="22 4 12 14.01 9 11.01" />
-      </svg>
-    )
-  }

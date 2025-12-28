@@ -3,7 +3,6 @@ import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
 import { MusicPlayer } from "@/components/common/MusicPlayer";
 
-// Sub-components will be imported here
 import Hero from "@/components/invitation/Hero";
 import Details from "@/components/invitation/Details";
 import Location from "@/components/invitation/Location";
@@ -14,20 +13,35 @@ import CountdownTimer from "@/components/invitation/CountdownTimer";
 
 export default function Invitation() {
   const { id } = useParams();
-  const { guests } = useStore();
+  const { fetchGuest, fetchEventDetails, eventDetails } = useStore();
   const [guest, setGuest] = useState<any>(null);
   const [isValid, setIsValid] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // In a real app, this would be an API call
-    const foundGuest = guests.find(g => g.id === id);
-    if (foundGuest) {
-      setGuest(foundGuest);
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
-  }, [id, guests]);
+    const loadData = async () => {
+      await fetchEventDetails();
+      if (id) {
+        const foundGuest = await fetchGuest(id);
+        if (foundGuest) {
+          setGuest(foundGuest);
+          setIsValid(true);
+        } else {
+          setIsValid(false);
+        }
+      }
+      setLoading(false);
+    };
+    loadData();
+  }, [id, fetchGuest, fetchEventDetails]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-rose-50">
+        <p className="font-serif text-gray-600">Cargando invitación...</p>
+      </div>
+    );
+  }
 
   if (!isValid && id) {
     return (
@@ -39,10 +53,16 @@ export default function Invitation() {
       </div>
     );
   }
-  
-  // For preview/development without ID, we can show a default guest or just the page
-  // Remove this for production!
-  const displayGuest = guest || { name: "Invitado Especial", maxSeats: 2 };
+
+  if (!eventDetails) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-rose-50">
+        <p className="font-serif text-gray-600">Error al cargar el evento.</p>
+      </div>
+    );
+  }
+
+  const displayGuest = guest || { name: "Invitado Especial", maxSeats: 2, id: "temp", status: "pending" };
 
   return (
     <div className="min-h-screen bg-rose-50/30 overflow-x-hidden font-sans selection:bg-rose-200">
