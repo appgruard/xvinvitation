@@ -92,10 +92,6 @@ export default function Invitation() {
              <Gifts />
            </section>
 
-           <section id="rsvp">
-             <RSVP guest={displayGuest} />
-           </section>
-
            <section id="important-notes" className="max-w-md mx-auto">
              <div className="bg-white p-6 rounded-lg shadow-sm border border-rose-100 text-center">
                <h3 className="font-serif text-xl text-rose-900 mb-2">Notas Importantes</h3>
@@ -104,6 +100,10 @@ export default function Invitation() {
                  <li>🚫 No niños. Agradecemos su comprensión.</li>
                </ul>
              </div>
+           </section>
+
+           <section id="rsvp">
+             <RSVP guest={displayGuest} />
            </section>
         </div>
 
