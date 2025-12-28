@@ -10,6 +10,8 @@ export default function Hero({ guestName }: { guestName: string }) {
         <img 
           src={yellowDressPortrait} 
           alt="María José" 
+          fetchPriority="high"
+          loading="eager"
           className="w-full h-full object-cover object-top"
         />
       </div>
