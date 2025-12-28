@@ -3,65 +3,60 @@ import { Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import musicFile from '../../assets/Veo_en_ti_la_luz_Rapunzel_Karaoke_1766949643106.mp3';
 
-export function MusicPlayer() {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [playing, setPlaying] = useState(true);
+// Singleton audio instance to prevent duplicates across renders/mounts
+let globalAudio: HTMLAudioElement | null = null;
 
-  // Auto-play on mount
+export function MusicPlayer() {
+  const [playing, setPlaying] = useState(false);
+
   useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      audio.volume = 0.3;
-      // Use a flag to ensure we only try to play once and handle user interaction requirements
-      const playAudio = () => {
-        audio.play().catch(() => {
-          setPlaying(false);
-        });
-      };
-      
-      playAudio();
+    // Initialize singleton if it doesn't exist
+    if (!globalAudio) {
+      globalAudio = new Audio(musicFile);
+      globalAudio.loop = true;
+      globalAudio.volume = 0.3;
     }
-    
-    // Cleanup to ensure audio stops if component unmounts
+
+    // Update local state based on global audio status
+    setPlaying(!globalAudio.paused);
+
+    // Auto-play attempt on mount
+    const playAttempt = () => {
+      globalAudio?.play().then(() => {
+        setPlaying(true);
+      }).catch(() => {
+        setPlaying(false);
+      });
+    };
+
+    playAttempt();
+
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
+      // We don't pause here to allow music to continue during navigation
+      // unless the component is truly being destroyed or we want to stop it
     };
   }, []);
 
   const togglePlay = () => {
-    const audio = audioRef.current;
-    if (audio) {
-      if (playing) {
-        audio.pause();
-        audio.muted = true;
-        // Reinforcing pause and ensuring volume is 0
-        audio.volume = 0;
-        setPlaying(false);
-      } else {
-        audio.muted = false;
-        audio.volume = 0.3;
-        audio.play().catch(error => console.error("Error playing audio:", error));
-        setPlaying(true);
-      }
+    if (!globalAudio) return;
+
+    if (playing) {
+      globalAudio.pause();
+      setPlaying(false);
+    } else {
+      globalAudio.play().catch(console.error);
+      setPlaying(true);
     }
   };
 
   return (
     <div className="fixed bottom-4 left-4 z-50">
-      <audio
-        ref={audioRef}
-        src={musicFile}
-        loop
-        preload="auto"
-      />
-      
       <Button
         onClick={togglePlay}
         variant="outline"
         size="icon"
         className="rounded-full bg-white/80 backdrop-blur-sm shadow-lg border-rose-200 hover:bg-rose-100 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4"
+        data-testid="button-toggle-music"
       >
         {playing ? (
           <Volume2 className="h-4 w-4 text-rose-800" />
