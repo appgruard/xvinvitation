@@ -1,4 +1,3 @@
-import { useStore } from "@/lib/store";
 import { Gift, ShoppingBag, Gem, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -9,14 +8,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import imgGifts from "../../assets/gallery/MBFP_205_1766948087931.jpg";
 
 export default function Gifts() {
-  const { eventDetails } = useStore();
-  if (!eventDetails) return null;
   const [copied, setCopied] = useState(false);
+  const bankInfo = {
+    titular: "Ángela López",
+    cedula: "05401367031",
+    banco: "BHD",
+    tipoCuenta: "Cuenta de ahorro",
+    numeroCuenta: "10102690028"
+  };
 
   const copyToClipboard = () => {
-    const text = `Banco: ${eventDetails.bankInfo.bank}\nCuenta: ${eventDetails.bankInfo.account}\nCLABE: ${eventDetails.bankInfo.clabe}\nTitular: ${eventDetails.bankInfo.owner}`;
+    const text = `Titular: ${bankInfo.titular}\nCédula: ${bankInfo.cedula}\nBanco: ${bankInfo.banco}\nTipo de Cuenta: ${bankInfo.tipoCuenta}\nNúmero de Cuenta: ${bankInfo.numeroCuenta}`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -32,9 +37,20 @@ export default function Gifts() {
     <div className="text-center space-y-12">
       <h2 className="font-display text-4xl text-rose-900">Mesa de Regalos</h2>
       
-      <p className="font-sans text-gray-600 max-w-lg mx-auto">
-        El regalo más importante es tu presencia, pero si deseas tener un detalle conmigo, aquí tienes algunas sugerencias.
-      </p>
+      <div className="flex flex-col md:flex-row items-center justify-center gap-8 max-w-5xl mx-auto mb-8">
+        <div className="flex-1 w-full h-80 rounded-lg overflow-hidden shadow-lg border-4 border-white">
+          <img 
+            src={imgGifts} 
+            alt="Mesa de regalos" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="flex-1 space-y-4 text-center md:text-left p-6">
+          <p className="font-sans text-gray-600 text-lg">
+            El regalo más importante es tu presencia, pero si deseas tener un detalle conmigo, aquí tienes algunas sugerencias.
+          </p>
+        </div>
+      </div>
 
       <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
         {giftCategories.map((item, idx) => (
@@ -63,20 +79,24 @@ export default function Gifts() {
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-1 bg-rose-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-500">Titular</p>
+                <p className="font-medium text-gray-900">{bankInfo.titular}</p>
+              </div>
+              <div className="space-y-1 bg-rose-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-500">Cédula</p>
+                <p className="font-mono text-gray-900">{bankInfo.cedula}</p>
+              </div>
+              <div className="space-y-1 bg-rose-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Banco</p>
-                <p className="font-medium text-gray-900">{eventDetails.bankInfo.bank}</p>
+                <p className="font-medium text-gray-900">{bankInfo.banco}</p>
+              </div>
+              <div className="space-y-1 bg-rose-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-500">Tipo de Cuenta</p>
+                <p className="font-medium text-gray-900">{bankInfo.tipoCuenta}</p>
               </div>
               <div className="space-y-1 bg-rose-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Número de Cuenta</p>
-                <p className="font-mono text-gray-900">{eventDetails.bankInfo.account}</p>
-              </div>
-              <div className="space-y-1 bg-rose-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500">CLABE</p>
-                <p className="font-mono text-gray-900">{eventDetails.bankInfo.clabe}</p>
-              </div>
-              <div className="space-y-1 bg-rose-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500">Titular</p>
-                <p className="font-medium text-gray-900">{eventDetails.bankInfo.owner}</p>
+                <p className="font-mono text-gray-900">{bankInfo.numeroCuenta}</p>
               </div>
               
               <Button onClick={copyToClipboard} className="w-full bg-rose-600 hover:bg-rose-700 text-white mt-4 gap-2">

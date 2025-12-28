@@ -3,27 +3,26 @@ import yellowDressPortrait from "../../assets/gallery/MBFP_091_1766948087914.jpg
 
 export default function Hero({ guestName }: { guestName: string }) {
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+    <section className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-end">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-black/20 z-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-rose-50 z-10" />
+        <div className="absolute inset-0 bg-black/10 z-10" />
         <img 
           src={yellowDressPortrait} 
           alt="María José" 
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-top"
         />
       </div>
 
-      {/* Content */}
-      <div className="relative z-20 text-center text-white p-4 max-w-4xl mx-auto space-y-8">
+      {/* Content positioned at bottom */}
+      <div className="relative z-20 text-center text-white p-8 max-w-4xl mx-auto space-y-6 mb-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <p className="font-serif italic text-xl md:text-2xl tracking-widest uppercase mb-4">Mis XV Años</p>
-          <h1 className="font-script text-7xl md:text-9xl mb-6 text-rose-100 drop-shadow-lg">
+          <p className="font-serif italic text-xl md:text-2xl tracking-widest uppercase mb-4 drop-shadow-lg">Mis XV Años</p>
+          <h1 className="font-script text-6xl md:text-8xl mb-6 text-rose-100 drop-shadow-2xl">
             María José
           </h1>
           <div className="w-24 h-1 bg-rose-200 mx-auto rounded-full mb-8" />

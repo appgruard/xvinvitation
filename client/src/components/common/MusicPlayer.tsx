@@ -20,11 +20,13 @@ export function MusicPlayer() {
     setPlaying(!playing);
   };
 
+  const musicUrl = "https://youtu.be/InTk6QkidRM?si=FU81IL70u85m59gg";
+  
   return (
     <div className="fixed bottom-4 left-4 z-50">
       <div className="hidden">
         <ReactPlayer
-          url={eventDetails.musicUrl}
+          url={musicUrl}
           playing={playing}
           loop={true}
           volume={0.8}

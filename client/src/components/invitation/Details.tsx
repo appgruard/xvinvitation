@@ -25,13 +25,10 @@ export default function Details({ guest }: { guest: any }) {
 
       <div className="space-y-2">
         <p className="font-serif text-2xl text-rose-800 uppercase tracking-widest">
-          {format(date, "EEEE d 'de' MMMM", { locale: es })}
+          Sábado, 24 de enero de 2026
         </p>
-        <div className="text-4xl font-display text-gray-800">
-          {format(date, "yyyy")}
-        </div>
         <p className="font-sans text-xl text-rose-500">
-          {format(date, "h:mm aa")}
+          7:30 p. m.
         </p>
       </div>
 
