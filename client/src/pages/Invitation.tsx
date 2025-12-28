@@ -95,6 +95,16 @@ export default function Invitation() {
            <section id="rsvp">
              <RSVP guest={displayGuest} />
            </section>
+
+           <section id="important-notes" className="max-w-md mx-auto">
+             <div className="bg-white p-6 rounded-lg shadow-sm border border-rose-100 text-center">
+               <h3 className="font-serif text-xl text-rose-900 mb-2">Notas Importantes</h3>
+               <ul className="text-sm text-gray-600 space-y-2 font-sans">
+                 <li>✨ Recepción personal e intransferible.</li>
+                 <li>🚫 No niños. Agradecemos su comprensión.</li>
+               </ul>
+             </div>
+           </section>
         </div>
 
         <footer className="bg-rose-900 text-rose-100 py-8 text-center mt-20">
