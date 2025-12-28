@@ -47,7 +47,7 @@ export default function Gifts() {
         </div>
         <div className="flex-1 space-y-4 text-center md:text-left p-6">
           <p className="font-serif italic text-rose-800 text-2xl mb-4">
-            "Vuestra compañía es mi mejor regalo..."
+            "Tenerte conmigo es mi mejor regalo..."
           </p>
           <p className="font-sans text-gray-600 text-lg">
             Si además deseas obsequiarme un detalle para atesorar este momento, aquí te comparto algunas ideas que me harían mucha ilusión.
