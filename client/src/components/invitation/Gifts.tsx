@@ -28,9 +28,9 @@ export default function Gifts() {
   };
 
   const giftCategories = [
-    { icon: <ShoppingBag className="w-8 h-8" />, label: "Cosméticos", desc: "Sephora, MAC, etc." },
-    { icon: <Gem className="w-8 h-8" />, label: "Joyería", desc: "Accesorios plateados/dorados" },
-    { icon: <ShoppingBag className="w-8 h-8" />, label: "Carteras/Bolsos", desc: "Estilo casual o formal" },
+    { icon: <ShoppingBag className="w-8 h-8" />, label: "Cosméticos", desc: "Cuidado de la piel y maquillaje" },
+    { icon: <Gem className="w-8 h-8" />, label: "Joyería", desc: "Accesorios para complementar" },
+    { icon: <ShoppingBag className="w-8 h-8" />, label: "Complementos", desc: "Carteras, bolsos y más" },
   ];
 
   return (
@@ -46,8 +46,11 @@ export default function Gifts() {
           />
         </div>
         <div className="flex-1 space-y-4 text-center md:text-left p-6">
+          <p className="font-serif italic text-rose-800 text-2xl mb-4">
+            "Vuestra compañía es mi mejor regalo..."
+          </p>
           <p className="font-sans text-gray-600 text-lg">
-            El regalo más importante es tu presencia, pero si deseas tener un detalle conmigo, aquí tienes algunas sugerencias.
+            Si además deseas obsequiarme un detalle para atesorar este momento, aquí te comparto algunas ideas que me harían mucha ilusión.
           </p>
         </div>
       </div>

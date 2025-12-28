@@ -22,7 +22,7 @@ export default function DressCode() {
           </div>
           <div className="space-y-2">
             <h4 className="font-bold text-rose-800 font-sans uppercase text-sm tracking-wider">Hombres</h4>
-            <p className="text-gray-600 font-serif">Traje completo y corbata.</p>
+            <p className="text-gray-600 font-serif">Camisa y pantalón de vestir (traje opcional).</p>
           </div>
         </div>
 
