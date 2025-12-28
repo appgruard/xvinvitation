@@ -35,7 +35,7 @@ export default function Gifts() {
 
   return (
     <div className="text-center space-y-12">
-      <h2 className="font-display text-4xl text-rose-900">Mesa de Regalos</h2>
+      <h2 className="font-display text-4xl text-rose-900">Regalos</h2>
       
       <div className="flex flex-col md:flex-row items-center justify-center gap-8 max-w-5xl mx-auto mb-8">
         <div className="flex-1 w-full h-80 rounded-lg overflow-hidden shadow-lg border-4 border-white">

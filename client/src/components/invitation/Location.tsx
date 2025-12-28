@@ -9,7 +9,7 @@ export default function Location() {
       <div className="flex flex-col md:flex-row items-center justify-center gap-8 max-w-5xl mx-auto">
         <div className="flex-1 space-y-4 text-center md:text-left p-6">
           <MapPin className="w-12 h-12 text-rose-400 mx-auto md:mx-0 mb-4" />
-          <h3 className="font-serif text-2xl text-gray-800">Salón de Eventos</h3>
+          <h3 className="font-serif text-2xl text-gray-800">Yovelys Eventos</h3>
           <p className="font-sans text-gray-600">📍 Nos vemos en una ubicación especial</p>
           <a 
             href="https://maps.app.goo.gl/vrYmEMaG3C1EPPyE9" 
