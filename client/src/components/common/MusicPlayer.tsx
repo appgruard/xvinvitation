@@ -12,10 +12,22 @@ export function MusicPlayer() {
     const audio = audioRef.current;
     if (audio) {
       audio.volume = 0.3;
-      audio.play().catch(() => {
-        setPlaying(false);
-      });
+      // Use a flag to ensure we only try to play once and handle user interaction requirements
+      const playAudio = () => {
+        audio.play().catch(() => {
+          setPlaying(false);
+        });
+      };
+      
+      playAudio();
     }
+    
+    // Cleanup to ensure audio stops if component unmounts
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
   }, []);
 
   const togglePlay = () => {

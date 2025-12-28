@@ -38,7 +38,7 @@ export default function Invitation() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-rose-50">
-        <p className="font-serif text-gray-600">Cargando invitación...</p>
+        <p className="font-serif text-rose-800">Cargando invitación...</p>
       </div>
     );
   }
