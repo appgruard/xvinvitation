@@ -7,14 +7,7 @@ import { Button } from '@/components/ui/button';
 export function MusicPlayer() {
   const { eventDetails } = useStore();
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(false); // Start muted to allow autoplay if needed, but we want sound.
-  const [showButton, setShowButton] = useState(false);
-  
-  // Attempt auto-play on mount
-  useEffect(() => {
-    setPlaying(true);
-    setShowButton(true);
-  }, []);
+  const [showButton, setShowButton] = useState(true);
 
   const togglePlay = () => {
     setPlaying(!playing);
