@@ -54,9 +54,9 @@ export default function RSVP({ guest }: { guest: Guest }) {
 
     return (
       <div className="text-center py-12 space-y-8 max-w-2xl mx-auto">
-        <div className="bg-gradient-to-br from-rose-50 to-white p-12 rounded-xl shadow-lg border-2 border-rose-100">
+        <div className="bg-gradient-to-br from-purple-50 to-white p-12 rounded-xl shadow-lg border-2 border-purple-100">
           <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-6" />
-          <h3 className="font-serif text-3xl text-rose-900 mb-2">
+          <h3 className="font-serif text-3xl text-purple-900 mb-2">
             {finalStatus === "confirmed" ? "¡Gracias por confirmar!" : "Gracias por avisarnos"}
           </h3>
           <p className="font-sans text-gray-600">
@@ -68,7 +68,7 @@ export default function RSVP({ guest }: { guest: Guest }) {
 
         {finalStatus === "confirmed" && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-white p-8 rounded-xl shadow-md border border-rose-100 max-w-sm mx-auto">
+            <div className="bg-white p-8 rounded-xl shadow-md border border-purple-100 max-w-sm mx-auto">
               <p className="text-sm text-gray-500 mb-4 uppercase tracking-widest font-sans">Tu código de acceso</p>
               <div ref={qrRef} className="flex justify-center mb-6 p-4 bg-white rounded-lg">
                 <QRCodeSVG 
@@ -76,14 +76,14 @@ export default function RSVP({ guest }: { guest: Guest }) {
                   size={200} 
                   level="H" 
                   includeMargin={true}
-                  fgColor="#be123c"
-                  bgColor="#fdf2f8"
+                  fgColor="#7c3aed"
+                  bgColor="#f5f3ff"
                 />
               </div>
               <p className="text-xs text-gray-400 mb-6 font-sans">Presenta este código al llegar al evento</p>
               <Button 
                 onClick={downloadQR} 
-                className="w-full bg-rose-600 hover:bg-rose-700 text-white gap-2"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white gap-2"
               >
                 <Download className="w-4 h-4" />
                 Descargar Código QR
@@ -99,11 +99,11 @@ export default function RSVP({ guest }: { guest: Guest }) {
 
   return (
     <div className="text-center space-y-10 max-w-2xl mx-auto">
-      <h2 className="font-display text-4xl text-rose-900">Confirmación de Asistencia</h2>
+      <h2 className="font-display text-4xl text-purple-900">Confirmación de Asistencia</h2>
       
-      <div className="bg-white p-8 rounded-xl shadow-lg border-t-4 border-rose-400">
+      <div className="bg-white p-8 rounded-xl shadow-lg border-t-4 border-purple-400">
         <p className="mb-8 font-serif text-lg text-gray-700">
-          Hola <span className="font-bold text-rose-600">{guest.name}</span>, por favor confírmanos tu asistencia antes del 10 de Enero.
+          Hola <span className="font-bold text-purple-600">{guest.name}</span>, por favor confírmanos tu asistencia antes del 10 de Enero.
         </p>
 
         <div className="space-y-8 text-left max-w-sm mx-auto">
@@ -142,7 +142,7 @@ export default function RSVP({ guest }: { guest: Guest }) {
 
           <Button 
             onClick={handleSubmit} 
-            className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-6 text-lg shadow-md transition-all hover:scale-[1.02]"
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-6 text-lg shadow-md transition-all hover:scale-[1.02]"
           >
             Enviar Confirmación
           </Button>
