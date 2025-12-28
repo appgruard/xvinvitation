@@ -29,11 +29,11 @@ COPY --from=builder /app/server ./server
 COPY --from=builder /app/shared ./shared
 
 # Expose the application port
-EXPOSE 5000
+EXPOSE 80
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=5000
+ENV PORT=80
 
 # Command to run the application
 CMD ["npm", "start"]
