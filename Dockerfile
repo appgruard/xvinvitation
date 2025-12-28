@@ -21,6 +21,12 @@ FROM node:20-bookworm-slim
 
 WORKDIR /app
 
+# Install sqlite3 for persistence
+RUN apt-get update && apt-get install -y sqlite3 && rm -rf /var/lib/apt/lists/*
+
+# Create data directory for persistence
+RUN mkdir -p /app/data && chown -R node:node /app/data
+
 # Copy only the necessary files for production
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json ./
@@ -34,6 +40,10 @@ EXPOSE 80
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=80
+ENV DATABASE_URL="file:/app/data/sqlite.db"
+
+# Set user to node for security
+USER node
 
 # Command to run the application
 CMD ["npm", "start"]
