@@ -39,7 +39,7 @@ export const useStore = create<AppState>()(
     (set, get) => ({
       eventDetails: {
         date: '2026-01-24T19:30:00',
-        musicUrl: 'https://www.youtube.com/watch?v=y2sS3gO9aJQ', // Example waltz
+        musicUrl: 'https://www.youtube.com/watch?v=y2sS3gO9aJQ',
         locationName: 'Salón de Eventos "El Castillo"',
         locationAddress: 'Av. Vallarta 1234, Guadalajara, Jal.',
         locationMapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.656976860368!2d-103.39343362475475!3d20.67566208088219!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428ae4e98d5453d%3A0xc4fdd3929a2ecbd1!2sAv.%20Vallarta%2C%20Guadalajara%2C%20Jal.!5e0!3m2!1sen!2smx!4v1703780000000!5m2!1sen!2smx',
@@ -54,7 +54,7 @@ export const useStore = create<AppState>()(
         { id: 'inv-001', name: 'Familia Pérez', maxSeats: 4, confirmedSeats: 0, status: 'pending' },
         { id: 'inv-002', name: 'Juan García', maxSeats: 1, confirmedSeats: 0, status: 'pending' },
       ],
-      adminPassword: 'admin', 
+      adminPassword: 'admin',
 
       updateEventDetails: (details) => set((state) => ({ 
         eventDetails: { ...state.eventDetails, ...details } 
@@ -76,6 +76,13 @@ export const useStore = create<AppState>()(
     }),
     {
       name: 'xv-app-storage',
+      version: 1,
+      migrate: (persistedState: any) => persistedState as AppState,
+      partialize: (state) => ({
+        guests: state.guests,
+        eventDetails: state.eventDetails,
+        adminPassword: state.adminPassword,
+      }),
     }
   )
 );
