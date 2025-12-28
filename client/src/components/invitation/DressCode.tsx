@@ -2,9 +2,11 @@ import { XCircle } from "lucide-react";
 
 export default function DressCode() {
   const forbiddenColors = [
-    { color: "bg-rose-200", label: "Rosa Claro" },
-    { color: "bg-white", label: "Blanco" },
-    { color: "bg-red-500", label: "Rojo" },
+    { color: "#FFFFFF", label: "Blanco" },
+    { color: "#FEE7F0", label: "Cuisse de nymphe" },
+    { color: "#F4A6C8", label: "Cuisse de nymphe émue" },
+    { color: "#FEBFD2", label: "Rose dragée" },
+    { color: "#8A9A5B", label: "Moss Green" },
   ];
 
   return (
@@ -32,7 +34,10 @@ export default function DressCode() {
           <div className="flex justify-center gap-4 flex-wrap">
             {forbiddenColors.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center gap-2">
-                <div className={`w-12 h-12 rounded-full shadow-md border-2 border-white ${item.color}`} />
+                <div 
+                  className="w-12 h-12 rounded-full shadow-md border-2 border-white" 
+                  style={{ backgroundColor: item.color }}
+                />
                 <span className="text-xs text-gray-500">{item.label}</span>
               </div>
             ))}
