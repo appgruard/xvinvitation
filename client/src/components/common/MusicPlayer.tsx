@@ -35,8 +35,13 @@ export function MusicPlayer() {
     if (audio) {
       if (playing) {
         audio.pause();
+        audio.muted = true;
+        // Reinforcing pause and ensuring volume is 0
+        audio.volume = 0;
         setPlaying(false);
       } else {
+        audio.muted = false;
+        audio.volume = 0.3;
         audio.play().catch(error => console.error("Error playing audio:", error));
         setPlaying(true);
       }
@@ -49,6 +54,7 @@ export function MusicPlayer() {
         ref={audioRef}
         src={musicFile}
         loop
+        preload="auto"
       />
       
       <Button
