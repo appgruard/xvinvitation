@@ -27,7 +27,7 @@ export default function Admin() {
   const [confirmations, setConfirmations] = useState<any[]>([]);
 
   const handleLogin = () => {
-    if (password === "admin") {
+    if (password === "PSangela99") {
       setIsAuthenticated(true);
       loadData();
     } else {
