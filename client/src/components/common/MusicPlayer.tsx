@@ -7,21 +7,27 @@ export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(true);
 
+  // Auto-play on mount
   useEffect(() => {
-    if (audioRef.current) {
-      if (playing) {
-        audioRef.current.play().catch(() => {
-          console.log('Autoplay prevented');
-          setPlaying(false);
-        });
-      } else {
-        audioRef.current.pause();
-      }
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = 0.3;
+      audio.play().catch(() => {
+        setPlaying(false);
+      });
     }
-  }, [playing]);
+  }, []);
 
   const togglePlay = () => {
-    setPlaying(!playing);
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current.play();
+        setPlaying(true);
+      } else {
+        audioRef.current.pause();
+        setPlaying(false);
+      }
+    }
   };
 
   return (
@@ -30,11 +36,6 @@ export function MusicPlayer() {
         ref={audioRef}
         src={musicFile}
         loop
-        onLoadedMetadata={() => {
-          if (audioRef.current) {
-            audioRef.current.volume = 0.3;
-          }
-        }}
       />
       
       <Button
