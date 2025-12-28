@@ -10,6 +10,7 @@ import DressCode from "@/components/invitation/DressCode";
 import Gifts from "@/components/invitation/Gifts";
 import RSVP from "@/components/invitation/RSVP";
 import CountdownTimer from "@/components/invitation/CountdownTimer";
+import Gallery from "@/components/invitation/Gallery";
 
 export default function Invitation() {
   const { id } = useParams();
@@ -74,6 +75,10 @@ export default function Invitation() {
         <div className="container mx-auto px-4 py-12 space-y-24">
            <section id="invitation">
               <Details guest={displayGuest} />
+           </section>
+
+           <section id="gallery" className="py-12">
+             <Gallery />
            </section>
 
            <section id="countdown">

@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
-import elegantPortrait from "@assets/generated_images/elegant_quinceañera_portrait.png";
+import yellowDressPortrait from "../../assets/gallery/MBFP_091_1766948087914.jpg";
 
 export default function Hero({ guestName }: { guestName: string }) {
   return (
     <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-black/30 z-10" />
+        <div className="absolute inset-0 bg-black/20 z-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-rose-50 z-10" />
         <img 
-          src={elegantPortrait} 
+          src={yellowDressPortrait} 
           alt="María José" 
           className="w-full h-full object-cover object-center"
         />
