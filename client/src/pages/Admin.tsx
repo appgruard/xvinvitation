@@ -59,8 +59,9 @@ export default function Admin() {
       });
       if (res.ok) {
         const guest = await res.json();
-        navigator.clipboard.writeText(guest.invitationLink);
-        alert("Invitado creado. Enlace copiado: " + guest.invitationLink);
+        const fullLink = `${window.location.origin}/invitacion/${guest.invitationId}`;
+        navigator.clipboard.writeText(fullLink);
+        alert("Invitado creado. Enlace copiado: " + fullLink);
         setNewGuest({ name: "", maxSeats: 2 });
         loadData();
       }
