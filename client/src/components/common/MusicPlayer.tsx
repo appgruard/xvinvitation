@@ -1,11 +1,24 @@
-import { useState } from 'react';
-import ReactPlayer from 'react-player';
+import { useState, useRef, useEffect } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import musicFile from '../../assets/Veo_en_ti_la_luz_Rapunzel_Karaoke_1766949643106.mp3';
 
 export function MusicPlayer() {
-  const [playing, setPlaying] = useState(false);
-  const musicUrl = "https://youtu.be/InTk6QkidRM?si=FU81IL70u85m59gg";
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(true);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      if (playing) {
+        audioRef.current.play().catch(() => {
+          console.log('Autoplay prevented');
+          setPlaying(false);
+        });
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [playing]);
 
   const togglePlay = () => {
     setPlaying(!playing);
@@ -13,17 +26,16 @@ export function MusicPlayer() {
 
   return (
     <div className="fixed bottom-4 left-4 z-50">
-      <div className="hidden">
-        <ReactPlayer
-          url={musicUrl}
-          playing={playing}
-          loop={true}
-          volume={0.3}
-          width="0"
-          height="0"
-          onError={() => console.log('Music player error')}
-        />
-      </div>
+      <audio
+        ref={audioRef}
+        src={musicFile}
+        loop
+        onLoadedMetadata={() => {
+          if (audioRef.current) {
+            audioRef.current.volume = 0.3;
+          }
+        }}
+      />
       
       <Button
         onClick={togglePlay}
