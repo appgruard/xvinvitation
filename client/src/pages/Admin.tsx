@@ -23,50 +23,43 @@ export default function Admin() {
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [newGuest, setNewGuest] = useState({ name: "", maxSeats: 2 });
-  const [guests, setGuests] = useState<any[]>([]);
-  const [confirmations, setConfirmations] = useState<any[]>([]);
+  const [guests, setGuests] = useState<any[]>([
+    { id: "1", invitationId: "inv-001", name: "Familia García", maxSeats: 4, status: "confirmed" },
+    { id: "2", invitationId: "inv-002", name: "Familia López", maxSeats: 3, status: "pending" },
+    { id: "3", invitationId: "inv-003", name: "Familia Martínez", maxSeats: 2, status: "declined" },
+  ]);
+  const [confirmations, setConfirmations] = useState<any[]>([
+    { id: "1", guestId: "1", status: "confirmed", seatsConfirmed: 3 },
+    { id: "2", guestId: "2", status: "pending", seatsConfirmed: 0 },
+  ]);
 
   const handleLogin = () => {
     if (password === "admin") {
       setIsAuthenticated(true);
-      loadData();
     } else {
       alert("Contraseña incorrecta");
     }
   };
 
-  const loadData = async () => {
-    try {
-      const guestsRes = await fetch("/api/admin/guests");
-      const confsRes = await fetch("/api/admin/confirmations");
-      if (guestsRes.ok) setGuests(await guestsRes.json());
-      if (confsRes.ok) setConfirmations(await confsRes.json());
-    } catch (error) {
-      console.error("Error loading data:", error);
-    }
-  };
-
-  const handleAddGuest = async () => {
+  const handleAddGuest = () => {
     if (!newGuest.name || newGuest.maxSeats < 1) {
       alert("Por favor completa los campos");
       return;
     }
-    try {
-      const res = await fetch("/api/admin/guests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newGuest)
-      });
-      if (res.ok) {
-        const guest = await res.json();
-        navigator.clipboard.writeText(guest.invitationLink);
-        alert("Invitado creado. Enlace copiado: " + guest.invitationLink);
-        setNewGuest({ name: "", maxSeats: 2 });
-        loadData();
-      }
-    } catch (error) {
-      console.error("Error creating guest:", error);
-    }
+    const newId = (guests.length + 1).toString();
+    const invitationId = `inv-${String(guests.length + 1).padStart(3, "0")}`;
+    const newGuestData = {
+      id: newId,
+      invitationId: invitationId,
+      name: newGuest.name,
+      maxSeats: newGuest.maxSeats,
+      status: "pending"
+    };
+    setGuests([...guests, newGuestData]);
+    const invitationLink = `${window.location.origin}/invitacion/${invitationId}`;
+    navigator.clipboard.writeText(invitationLink);
+    alert("Invitado creado. Enlace copiado: " + invitationLink);
+    setNewGuest({ name: "", maxSeats: 2 });
   };
 
   const copyLink = (invitationId: string) => {
