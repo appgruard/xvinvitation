@@ -61,10 +61,10 @@
 :root {
   /* Elegant Rose Gold & White Theme */
   --background: 350 30% 98%; /* Very light blush */
-  --foreground: 350 20% 20%; /* Dark rose grey */
+  --foreground: 350 45% 35%; /* Deep dusty rose for text contrast */
 
   --card: 0 0% 100%;
-  --card-foreground: 350 20% 20%;
+  --card-foreground: 350 45% 35%;
 
   --popover: 0 0% 100%;
   --popover-foreground: 350 20% 20%;

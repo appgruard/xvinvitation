@@ -22,10 +22,10 @@ export default function Hero({ guestName }: { guestName: string }) {
           transition={{ duration: 1, delay: 0.5 }}
         >
           <p className="font-serif italic text-xl md:text-2xl tracking-widest uppercase mb-4 drop-shadow-lg">Mis XV Años</p>
-          <h1 className="font-script text-6xl md:text-8xl mb-6 text-purple-100 drop-shadow-2xl">
+          <h1 className="font-script text-6xl md:text-8xl mb-6 text-rose-100 drop-shadow-2xl">
             María José
           </h1>
-          <div className="w-24 h-1 bg-purple-200 mx-auto rounded-full mb-8" />
+          <div className="w-24 h-1 bg-rose-200 mx-auto rounded-full mb-8" />
         </motion.div>
 
         <motion.div
@@ -35,7 +35,7 @@ export default function Hero({ guestName }: { guestName: string }) {
           className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-lg inline-block"
         >
           <p className="font-sans text-lg tracking-wide uppercase mb-2">Invitación para</p>
-          <p className="font-serif text-3xl text-purple-100">{guestName}</p>
+          <p className="font-serif text-3xl text-rose-100">{guestName}</p>
         </motion.div>
       </div>
 
