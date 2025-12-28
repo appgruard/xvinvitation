@@ -15,6 +15,7 @@ export interface IStorage {
   getAllGuests(): Promise<Guest[]>;
   createGuest(guest: InsertGuest): Promise<Guest>;
   updateGuest(id: string, updates: Partial<Guest>): Promise<Guest | undefined>;
+  deleteGuest(id: string): Promise<boolean>;
   
   // Confirmations
   createConfirmation(confirmation: InsertConfirmation): Promise<Confirmation>;
@@ -67,6 +68,13 @@ export class DatabaseStorage implements IStorage {
   async updateGuest(id: string, updates: Partial<Guest>): Promise<Guest | undefined> {
     const result = await db.update(guests).set(updates).where(eq(guests.id, id)).returning();
     return result[0];
+  }
+
+  async deleteGuest(id: string): Promise<boolean> {
+    // Eliminar confirmaciones primero para respetar integridad referencial
+    await db.delete(confirmations).where(eq(confirmations.guestId, id));
+    const result = await db.delete(guests).where(eq(guests.id, id)).returning();
+    return result.length > 0;
   }
 
   // Confirmations

@@ -146,5 +146,18 @@ export async function registerRoutes(
     }
   });
 
+  // DELETE /api/admin/guests/:id - Delete guest (admin)
+  app.delete("/api/admin/guests/:id", async (req, res) => {
+    try {
+      const success = await storage.deleteGuest(req.params.id);
+      if (!success) {
+        return res.status(404).json({ error: "Guest not found" });
+      }
+      res.json({ message: "Guest deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete guest" });
+    }
+  });
+
   return httpServer;
 }
