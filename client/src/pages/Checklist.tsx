@@ -57,7 +57,8 @@ export default function Checklist() {
         "_______________________"
       ]);
 
-      autoTable(doc, {
+      // @ts-ignore - autoTable is attached to jsPDF instance or imported
+      (doc as any).autoTable({
         startY: 45,
         head: [['Check', 'Invitado', 'Lugares', 'Notas / Firma']],
         body: tableData,
