@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function Verify() {
   const params = useParams();
-  const id = params.id as string;
+  const id = params ? (params as any).id : undefined;
   const { guests } = useStore();
   
   const guest = guests.find(g => g.id === id);
