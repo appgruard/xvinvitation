@@ -47,20 +47,23 @@ export default function Checklist() {
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 1.5, // Slightly lower scale to reduce memory pressure
         useCORS: true,
-        logging: false,
+        logging: true,
         backgroundColor: '#ffffff',
-        windowWidth: 1200 // Use a fixed width for capture to ensure desktop-like layout in PDF
+        windowWidth: 1200,
+        scrollX: 0,
+        scrollY: 0,
+        x: 0,
+        y: 0
       });
       
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/jpeg', 0.8); // Use JPEG with 0.8 quality to reduce size
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`lista-invitados-mj.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
