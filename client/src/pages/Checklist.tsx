@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useStore } from "@/lib/store";
 import { CheckSquare, Printer, Users, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
 
 export default function Checklist() {
-  const { guests } = useStore() as any;
   const [localGuests, setLocalGuests] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
@@ -19,6 +16,8 @@ export default function Checklist() {
         }
       } catch (error) {
         console.error("Error loading checklist data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     loadData();
@@ -34,11 +33,13 @@ export default function Checklist() {
   const handleDownloadPDF = () => {
     try {
       // @ts-ignore
-      const { jsPDF } = window.jspdf || {};
-      if (!jsPDF) {
-        throw new Error("jsPDF not loaded from CDN");
+      const jspdfLib = window.jspdf;
+      if (!jspdfLib || !jspdfLib.jsPDF) {
+        alert("Las herramientas de PDF se están cargando. Por favor espera un momento e intenta de nuevo. Si el problema persiste, usa el botón de Imprimir.");
+        return;
       }
-      const doc = new jsPDF();
+
+      const doc = new jspdfLib.jsPDF();
       
       // Header
       doc.setFontSize(22);
@@ -60,12 +61,12 @@ export default function Checklist() {
         "_______________________"
       ]);
 
-      // Use the global autoTable if it's not on the instance
+      // Check for autoTable on the document instance or globally
       // @ts-ignore
-      const autoTableFunc = doc.autoTable || (window as any).jspdf?.autoTable || (window as any).autoTable;
+      const autoTable = doc.autoTable || window.autoTable;
 
-      if (typeof autoTableFunc === 'function') {
-        autoTableFunc(doc, {
+      if (typeof autoTable === 'function') {
+        autoTable(doc, {
           startY: 45,
           head: [['Check', 'Invitado', 'Lugares', 'Notas / Firma']],
           body: tableData,
@@ -97,9 +98,17 @@ export default function Checklist() {
       doc.save(`lista-invitados-mj.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Error técnico al generar el PDF. Por favor, use el botón de Imprimir y elija "Guardar como PDF" en su navegador para obtener el documento.');
+      alert('Error al generar el PDF. Por favor, usa el botón de Imprimir y elige "Guardar como PDF".');
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white p-4 sm:p-8 max-w-4xl mx-auto print:p-0">
