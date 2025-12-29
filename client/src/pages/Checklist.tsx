@@ -42,39 +42,97 @@ export default function Checklist() {
 
       const doc = new jspdf.jsPDF();
       
-      doc.setFontSize(22);
-      doc.setTextColor(159, 18, 57);
-      doc.text("Maria Jose", 105, 20, { align: "center" });
+      // Background and Borders
+      doc.setDrawColor(255, 228, 230); // rose-100
+      doc.setLineWidth(1);
+      doc.rect(5, 5, 200, 287); // Page border
       
+      // Decorative corner elements (simulated)
+      doc.setDrawColor(244, 63, 94); // rose-500
+      doc.setLineWidth(0.5);
+      doc.line(10, 10, 30, 10);
+      doc.line(10, 10, 10, 30);
+      
+      doc.line(180, 10, 200, 10);
+      doc.line(200, 10, 200, 30);
+
+      // Header
+      doc.setFont("times", "italic");
+      doc.setFontSize(42);
+      doc.setTextColor(225, 29, 72); // rose-600
+      doc.text("María José", 105, 35, { align: "center" });
+      
+      doc.setFont("helvetica", "normal");
       doc.setFontSize(14);
-      doc.setTextColor(100);
-      doc.text("Checklist de Invitados - XV Anos", 105, 30, { align: "center" });
+      doc.setTextColor(159, 18, 57); // rose-900
+      doc.text("LISTA DE ACCESO EXCLUSIVA", 105, 45, { align: "center" });
       
+      // Sub-header stats
+      doc.setDrawColor(254, 205, 211); // rose-200
+      doc.line(80, 50, 130, 50);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`${confirmedGuests.length} Grupos Confirmados | ${totalSeats} Invitados Totales`, 105, 58, { align: "center" });
+
       const tableData = confirmedGuests.map((guest) => [
-        "[  ]",
-        guest.name,
-        guest.confirmedSeats,
-        "_______________________"
+        "", // Checkbox column
+        guest.name.toUpperCase(),
+        guest.confirmedSeats.toString(),
+        "" // Signature column
       ]);
 
       // @ts-ignore
       if (doc.autoTable) {
         // @ts-ignore
         doc.autoTable({
-          startY: 45,
-          head: [['Check', 'Invitado', 'Lugares', 'Notas / Firma']],
+          startY: 65,
+          head: [['✓', 'INVITADO', 'LUG.', 'FIRMA / NOTAS']],
           body: tableData,
-          headStyles: { fillColor: [159, 18, 57] }
-        });
-      } else {
-        let y = 50;
-        confirmedGuests.forEach(g => {
-          doc.text(`[ ] ${g.name} - ${g.confirmedSeats} lug.`, 20, y);
-          y += 10;
+          theme: 'striped',
+          headStyles: { 
+            fillColor: [159, 18, 57], 
+            textColor: [255, 255, 255],
+            fontStyle: 'bold',
+            halign: 'center',
+            fontSize: 10
+          },
+          columnStyles: {
+            0: { cellWidth: 12, halign: 'center' },
+            1: { fontStyle: 'bold', textColor: [50, 50, 50] },
+            2: { halign: 'center', fontStyle: 'bold', textColor: [225, 29, 72] },
+            3: { cellWidth: 50 }
+          },
+          styles: {
+            font: "helvetica",
+            fontSize: 9,
+            cellPadding: 4,
+            lineColor: [255, 228, 230],
+            lineWidth: 0.1,
+          },
+          didDrawCell: (data: any) => {
+            if (data.section === 'body' && data.column.index === 0) {
+              doc.setDrawColor(159, 18, 57);
+              doc.rect(data.cell.x + 3.5, data.cell.y + 2.5, 5, 5);
+            }
+            if (data.section === 'body' && data.column.index === 3) {
+              doc.setDrawColor(200, 200, 200);
+              doc.line(data.cell.x + 2, data.cell.y + data.cell.height - 2, data.cell.x + data.cell.width - 2, data.cell.y + data.cell.height - 2);
+            }
+          },
+          alternateRowStyles: {
+            fillColor: [255, 251, 252]
+          }
         });
       }
 
-      doc.save("lista-invitados-mj.pdf");
+      // Footer
+      const finalY = (doc as any).lastAutoTable.finalY || 200;
+      doc.setFontSize(9);
+      doc.setTextColor(190, 190, 190);
+      doc.text("E V E N T O :  2 4  D E  E N E R O ,  2 0 2 6", 105, 285, { align: "center" });
+
+      doc.save(`Checklist-MJ-${new Date().toISOString().split('T')[0]}.pdf`);
     } catch (error) {
       console.error(error);
       window.print();
