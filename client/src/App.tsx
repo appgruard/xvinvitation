@@ -7,12 +7,14 @@ import NotFound from "@/pages/not-found";
 import Invitation from "@/pages/Invitation";
 import Admin from "@/pages/Admin";
 import Landing from "@/pages/Landing";
+import Verify from "@/pages/Verify";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
       <Route path="/invitacion/:id" component={Invitation} />
+      <Route path="/verificar/:id" component={Verify} />
       <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>

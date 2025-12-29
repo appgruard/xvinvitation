@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { CheckCircle2, Download } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 
 export default function RSVP({ guest }: { guest: Guest }) {
   const { submitConfirmation } = useStore();
@@ -21,13 +21,7 @@ export default function RSVP({ guest }: { guest: Guest }) {
   const qrRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async () => {
-    const qrData = {
-      id: guest.id,
-      name: guest.name,
-      seats: parseInt(seats),
-      timestamp: new Date().toISOString()
-    };
-    await submitConfirmation(guest.id, status as "confirmed" | "declined", status === "confirmed" ? parseInt(seats) : 0, qrData);
+    await submitConfirmation(guest.id, status as "confirmed" | "declined", status === "confirmed" ? parseInt(seats) : 0);
     setIsSubmitted(true);
   };
 
@@ -37,20 +31,17 @@ export default function RSVP({ guest }: { guest: Guest }) {
       const url = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.href = url;
-      link.download = `invitacion-${guest.id}.png`;
+      link.download = `invitacion-mj-${guest.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     }
   };
 
   if (isSubmitted || guest.status !== "pending") {
     const finalStatus = isSubmitted ? status : guest.status;
     const finalSeats = isSubmitted ? parseInt(seats) : guest.confirmedSeats;
-    const qrData = JSON.stringify({
-      id: guest.id,
-      name: guest.name,
-      seats: finalSeats,
-      timestamp: new Date().toISOString()
-    });
+    const verificationUrl = `${window.location.origin}/verificar/${guest.id}`;
 
     return (
       <div className="text-center py-12 space-y-8 max-w-2xl mx-auto">
@@ -71,16 +62,23 @@ export default function RSVP({ guest }: { guest: Guest }) {
             <div className="bg-white p-8 rounded-xl shadow-md border border-rose-100 max-w-sm mx-auto">
               <p className="text-sm text-gray-500 mb-4 uppercase tracking-widest font-sans">Tu código de acceso</p>
               <div ref={qrRef} className="flex justify-center mb-6 p-4 bg-white rounded-lg">
-                <QRCodeSVG 
-                  value={qrData} 
-                  size={200} 
+                <QRCodeCanvas 
+                  value={verificationUrl} 
+                  size={256} 
                   level="H" 
                   includeMargin={true}
-                  fgColor="#9f1239"
-                  bgColor="#fff1f2"
+                  imageSettings={{
+                    src: "/attached_assets/generated_images/elegant_rose_gold_quinceañera_emblem.png",
+                    x: undefined,
+                    y: undefined,
+                    height: 40,
+                    width: 40,
+                    excavate: true,
+                    opacity: 1
+                  }}
                 />
               </div>
-              <p className="text-xs text-gray-400 mb-6 font-sans">Presenta este código al llegar al evento</p>
+              <p className="text-xs text-gray-400 mb-6 font-sans">Presenta este código al llegar al evento para validar tus lugares</p>
               <Button 
                 onClick={downloadQR} 
                 className="w-full bg-rose-600 hover:bg-rose-700 text-white gap-2"
