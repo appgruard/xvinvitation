@@ -1,8 +1,8 @@
 import { useStore } from "@/lib/store";
 import { CheckSquare, Printer, Users, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { useEffect, useState } from "react";
 
 export default function Checklist() {
@@ -26,7 +26,6 @@ export default function Checklist() {
     loadData();
   }, []);
 
-  // We use the local guests from API since the store doesn't have the full list
   const confirmedGuests = localGuests.filter(g => g.status === "confirmed");
   const totalSeats = confirmedGuests.reduce((acc, g) => acc + (g.confirmedSeats || 0), 0);
 
@@ -34,42 +33,54 @@ export default function Checklist() {
     window.print();
   };
 
-  const handleDownloadPDF = async () => {
-    const element = document.getElementById('checklist-content');
-    if (!element) return;
-
-    // Temporarily hide buttons for the capture
-    const buttons = document.querySelectorAll('.no-export');
-    buttons.forEach(btn => (btn as HTMLElement).style.display = 'none');
-
+  const handleDownloadPDF = () => {
     try {
-      // Small delay to ensure buttons are hidden
-      await new Promise(resolve => setTimeout(resolve, 100));
+      const doc = new jsPDF();
+      
+      // Header
+      doc.setFontSize(22);
+      doc.setTextColor(159, 18, 57); // Rose 800
+      doc.text("Maria Jose", 105, 20, { align: "center" });
+      
+      doc.setFontSize(14);
+      doc.setTextColor(100);
+      doc.text("Checklist de Invitados - XV Anos", 105, 30, { align: "center" });
+      
+      doc.setFontSize(10);
+      doc.text(`Total Grupos: ${confirmedGuests.length} | Total Invitados: ${totalSeats}`, 105, 38, { align: "center" });
+      
+      // Table
+      const tableData = confirmedGuests.map((guest, index) => [
+        "[  ]", // Checkbox placeholder
+        guest.name,
+        guest.confirmedSeats,
+        "_______________________"
+      ]);
 
-      const canvas = await html2canvas(element, {
-        scale: 1.5, // Slightly lower scale to reduce memory pressure
-        useCORS: true,
-        logging: true,
-        backgroundColor: '#ffffff',
-        windowWidth: 1200,
-        scrollX: 0,
-        scrollY: 0,
-        x: 0,
-        y: 0
+      autoTable(doc, {
+        startY: 45,
+        head: [['Check', 'Invitado', 'Lugares', 'Notas / Firma']],
+        body: tableData,
+        headStyles: { 
+          fillColor: [159, 18, 57],
+          textColor: [255, 255, 255],
+          fontStyle: 'bold'
+        },
+        columnStyles: {
+          0: { cellWidth: 20, halign: 'center' },
+          2: { cellWidth: 20, halign: 'center' },
+          3: { cellWidth: 50 }
+        },
+        styles: {
+          font: "helvetica",
+          fontSize: 10
+        }
       });
-      
-      const imgData = canvas.toDataURL('image/jpeg', 0.8); // Use JPEG with 0.8 quality to reduce size
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
-      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`lista-invitados-mj.pdf`);
+
+      doc.save(`lista-invitados-mj.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Hubo un error al generar el PDF. Por favor intenta de nuevo.');
-    } finally {
-      buttons.forEach(btn => (btn as HTMLElement).style.display = '');
     }
   };
 
