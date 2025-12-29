@@ -44,33 +44,41 @@ export default function Checklist() {
       
       // Background and Borders
       doc.setDrawColor(255, 228, 230); // rose-100
-      doc.setLineWidth(1);
-      doc.rect(5, 5, 200, 287); // Page border
-      
-      // Decorative corner elements (simulated)
-      doc.setDrawColor(244, 63, 94); // rose-500
       doc.setLineWidth(0.5);
-      doc.line(10, 10, 30, 10);
-      doc.line(10, 10, 10, 30);
-      
-      doc.line(180, 10, 200, 10);
-      doc.line(200, 10, 200, 30);
+      doc.rect(8, 8, 194, 281); // Page border sutil
+
+      // Decorative corner elements with circles/dots to simulate floral pattern since we can't easily load external assets in jspdf without base64
+      const drawFlower = (x: number, y: number) => {
+        doc.setDrawColor(244, 63, 94); // rose-500
+        doc.setLineWidth(0.2);
+        for(let i=0; i<6; i++) {
+          const angle = (i * Math.PI * 2) / 6;
+          doc.ellipse(x + Math.cos(angle)*2, y + Math.sin(angle)*2, 1.5, 1.5);
+        }
+        doc.setFillColor(251, 191, 36); // center
+        doc.circle(x, y, 0.8, 'FD');
+      };
+
+      drawFlower(15, 15);
+      drawFlower(195, 15);
+      drawFlower(15, 282);
+      drawFlower(195, 282);
 
       // Header
-      // Usando Times Italic para simular un estilo manuscrito elegante similar a la fuente 'script' de la web
+      // Usando 'times' italic para simular un estilo manuscrito elegante similar a la fuente 'script' de la web
       doc.setFont("times", "italic");
-      doc.setFontSize(52);
+      doc.setFontSize(72); // Aumentado para que parezca una firma protagonista
       doc.setTextColor(225, 29, 72); // rose-600
-      doc.text("María José", 105, 38, { align: "center" });
+      doc.text("María José", 105, 45, { align: "center" });
       
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(14);
+      doc.setFontSize(10);
       doc.setTextColor(159, 18, 57); // rose-900
-      doc.text("LISTA DE ACCESO", 105, 48, { align: "center" });
+      doc.text("L I S T A   D E   A C C E S O   E X C L U S I V A", 105, 55, { align: "center" });
       
       // Sub-header stats
       doc.setDrawColor(254, 205, 211); // rose-200
-      doc.line(70, 52, 140, 52);
+      doc.line(70, 58, 140, 58);
       
       doc.setFontSize(10);
       doc.setTextColor(100);
