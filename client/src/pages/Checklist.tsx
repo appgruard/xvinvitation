@@ -57,23 +57,24 @@ export default function Checklist() {
       doc.line(200, 10, 200, 30);
 
       // Header
+      // Usando Times Italic para simular un estilo manuscrito elegante similar a la fuente 'script' de la web
       doc.setFont("times", "italic");
-      doc.setFontSize(42);
+      doc.setFontSize(52);
       doc.setTextColor(225, 29, 72); // rose-600
-      doc.text("María José", 105, 35, { align: "center" });
+      doc.text("María José", 105, 38, { align: "center" });
       
       doc.setFont("helvetica", "normal");
       doc.setFontSize(14);
       doc.setTextColor(159, 18, 57); // rose-900
-      doc.text("LISTA DE ACCESO EXCLUSIVA", 105, 45, { align: "center" });
+      doc.text("LISTA DE ACCESO", 105, 48, { align: "center" });
       
       // Sub-header stats
       doc.setDrawColor(254, 205, 211); // rose-200
-      doc.line(80, 50, 130, 50);
+      doc.line(70, 52, 140, 52);
       
       doc.setFontSize(10);
       doc.setTextColor(100);
-      doc.text(`${confirmedGuests.length} Grupos Confirmados | ${totalSeats} Invitados Totales`, 105, 58, { align: "center" });
+      doc.text(`${confirmedGuests.length} GRUPOS | ${totalSeats} INVITADOS`, 105, 60, { align: "center" });
 
       const tableData = confirmedGuests.map((guest) => [
         "", // Checkbox column
@@ -86,42 +87,52 @@ export default function Checklist() {
       if (doc.autoTable) {
         // @ts-ignore
         doc.autoTable({
-          startY: 65,
+          startY: 70,
           head: [['✓', 'INVITADO', 'LUG.', 'FIRMA / NOTAS']],
           body: tableData,
-          theme: 'striped',
+          theme: 'plain', // Cambiado a plain para quitar la "tabla cuadrada" rígida
           headStyles: { 
-            fillColor: [159, 18, 57], 
-            textColor: [255, 255, 255],
+            fillColor: [255, 255, 255], // Fondo blanco para el encabezado
+            textColor: [159, 18, 57], // Texto rose-900
             fontStyle: 'bold',
             halign: 'center',
-            fontSize: 10
+            fontSize: 11,
+            lineWidth: { bottom: 0.5 },
+            lineColor: [251, 113, 133] // rose-400 border bottom
           },
           columnStyles: {
-            0: { cellWidth: 12, halign: 'center' },
-            1: { fontStyle: 'bold', textColor: [50, 50, 50] },
+            0: { cellWidth: 15, halign: 'center' },
+            1: { cellPadding: { left: 5, top: 6, bottom: 6 }, textColor: [50, 50, 50] },
             2: { halign: 'center', fontStyle: 'bold', textColor: [225, 29, 72] },
-            3: { cellWidth: 50 }
+            3: { cellWidth: 55 }
           },
           styles: {
             font: "helvetica",
-            fontSize: 9,
-            cellPadding: 4,
-            lineColor: [255, 228, 230],
-            lineWidth: 0.1,
+            fontSize: 10,
+            cellPadding: 5,
+            lineWidth: 0, // Quitamos todos los bordes de celda por defecto
           },
           didDrawCell: (data: any) => {
-            if (data.section === 'body' && data.column.index === 0) {
-              doc.setDrawColor(159, 18, 57);
-              doc.rect(data.cell.x + 3.5, data.cell.y + 2.5, 5, 5);
+            // Dibujar solo la línea inferior para un look más moderno y abierto
+            if (data.section === 'body') {
+              doc.setDrawColor(255, 228, 230); // rose-100
+              doc.setLineWidth(0.1);
+              doc.line(data.cell.x, data.cell.y + data.cell.height, data.cell.x + data.cell.width, data.cell.y + data.cell.height);
+              
+              if (data.column.index === 0) {
+                // Checkbox circular más bonito
+                doc.setDrawColor(251, 113, 133); // rose-400
+                doc.setLineWidth(0.3);
+                doc.ellipse(data.cell.x + 7.5, data.cell.y + data.cell.height/2, 2.5, 2.5);
+              }
+              
+              if (data.column.index === 3) {
+                // Línea de firma sutil
+                doc.setDrawColor(220, 220, 220);
+                doc.setLineWidth(0.1);
+                doc.line(data.cell.x + 5, data.cell.y + data.cell.height - 4, data.cell.x + data.cell.width - 5, data.cell.y + data.cell.height - 4);
+              }
             }
-            if (data.section === 'body' && data.column.index === 3) {
-              doc.setDrawColor(200, 200, 200);
-              doc.line(data.cell.x + 2, data.cell.y + data.cell.height - 2, data.cell.x + data.cell.width - 2, data.cell.y + data.cell.height - 2);
-            }
-          },
-          alternateRowStyles: {
-            fillColor: [255, 251, 252]
           }
         });
       }
