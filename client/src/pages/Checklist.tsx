@@ -1,13 +1,12 @@
+import React, { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import { CheckSquare, Printer, Users, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-import { useEffect, useState } from "react";
 
 export default function Checklist() {
   const { guests } = useStore() as any;
-  const [dataLoaded, setDataLoaded] = useState(false);
   const [localGuests, setLocalGuests] = useState<any[]>([]);
 
   useEffect(() => {
@@ -17,7 +16,6 @@ export default function Checklist() {
         if (res.ok) {
           const data = await res.json();
           setLocalGuests(data);
-          setDataLoaded(true);
         }
       } catch (error) {
         console.error("Error loading checklist data:", error);
@@ -35,6 +33,11 @@ export default function Checklist() {
 
   const handleDownloadPDF = () => {
     try {
+      // @ts-ignore
+      const { jsPDF } = window.jspdf || {};
+      if (!jsPDF) {
+        throw new Error("jsPDF not loaded from CDN");
+      }
       const doc = new jsPDF();
       
       // Header
@@ -57,10 +60,12 @@ export default function Checklist() {
         "_______________________"
       ]);
 
+      // Use the global autoTable if it's not on the instance
       // @ts-ignore
-      if (doc.autoTable) {
-        // @ts-ignore
-        doc.autoTable({
+      const autoTableFunc = doc.autoTable || (window as any).jspdf?.autoTable || (window as any).autoTable;
+
+      if (typeof autoTableFunc === 'function') {
+        autoTableFunc(doc, {
           startY: 45,
           head: [['Check', 'Invitado', 'Lugares', 'Notas / Firma']],
           body: tableData,
@@ -80,7 +85,7 @@ export default function Checklist() {
           }
         });
       } else {
-        // Fallback if plugin is not correctly attached
+        // Simple fallback
         let y = 50;
         doc.setFontSize(12);
         confirmedGuests.forEach(g => {
@@ -92,7 +97,7 @@ export default function Checklist() {
       doc.save(`lista-invitados-mj.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Error técnico al generar el PDF. Por favor, intente usar el botón de Imprimir y guardarlo como PDF desde las opciones de impresión de su navegador.');
+      alert('Error técnico al generar el PDF. Por favor, use el botón de Imprimir y elija "Guardar como PDF" en su navegador para obtener el documento.');
     }
   };
 
