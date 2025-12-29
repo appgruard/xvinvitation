@@ -78,11 +78,11 @@ export default function Checklist() {
       
       // Sub-header stats
       doc.setDrawColor(254, 205, 211); // rose-200
-      doc.line(70, 58, 140, 58);
+      doc.line(70, 56, 140, 56); // Ajustado de 58 a 56 para dar espacio
       
       doc.setFontSize(10);
       doc.setTextColor(100);
-      doc.text(`${confirmedGuests.length} GRUPOS | ${totalSeats} INVITADOS`, 105, 60, { align: "center" });
+      doc.text(`${confirmedGuests.length} GRUPOS | ${totalSeats} INVITADOS`, 105, 64, { align: "center" }); // Bajado de 60 a 64
 
       const tableData = confirmedGuests.map((guest) => [
         "", // Checkbox column
@@ -95,7 +95,7 @@ export default function Checklist() {
       if (doc.autoTable) {
         // @ts-ignore
         doc.autoTable({
-          startY: 70,
+          startY: 72, // Bajado de 70 a 72 para evitar solapamiento
           head: [['✓', 'INVITADO', 'LUG.', 'FIRMA / NOTAS']],
           body: tableData,
           theme: 'plain', // Cambiado a plain para quitar la "tabla cuadrada" rígida
