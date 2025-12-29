@@ -67,14 +67,14 @@ export default function Checklist() {
       // Header
       // Usando 'times' italic para simular un estilo manuscrito elegante similar a la fuente 'script' de la web
       doc.setFont("times", "italic");
-      doc.setFontSize(72); // Aumentado para que parezca una firma protagonista
+      doc.setFontSize(60); // Reducido de 72 a 60
       doc.setTextColor(225, 29, 72); // rose-600
       doc.text("María José", 105, 45, { align: "center" });
       
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
       doc.setTextColor(159, 18, 57); // rose-900
-      doc.text("L I S T A   D E   A C C E S O   E X C L U S I V A", 105, 55, { align: "center" });
+      doc.text("L I S T A   D E   A C C E S O", 105, 55, { align: "center" });
       
       // Sub-header stats
       doc.setDrawColor(254, 205, 211); // rose-200
