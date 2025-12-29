@@ -45,7 +45,7 @@ export default function RSVP({ guest }: { guest: Guest }) {
 
     return (
       <div className="text-center py-12 space-y-8 max-w-2xl mx-auto">
-        <div className="bg-gradient-to-br from-rose-50 to-white p-12 rounded-xl shadow-lg border-2 border-rose-100">
+        <div className="bg-gradient-to-br from-rose-50 to-white p-12 rounded-[2.5rem] shadow-xl border-2 border-rose-100">
           <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-6" />
           <h3 className="font-serif text-3xl text-rose-900 mb-2">
             {finalStatus === "confirmed" ? "¡Gracias por confirmar!" : "Gracias por avisarnos"}
@@ -58,43 +58,57 @@ export default function RSVP({ guest }: { guest: Guest }) {
         </div>
 
         {finalStatus === "confirmed" && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-white p-8 rounded-xl shadow-md border border-rose-100 max-w-sm mx-auto">
-              <p className="text-sm text-gray-500 mb-4 uppercase tracking-widest font-sans">Tu código de acceso</p>
-              <div ref={qrRef} className="flex justify-center mb-6 p-4 bg-white rounded-lg">
-                <QRCodeCanvas 
-                  value={verificationUrl} 
-                  size={256} 
-                  level="H" 
-                  includeMargin={true}
-                  imageSettings={{
-                    src: "/attached_assets/generated_images/elegant_rose_gold_quinceañera_emblem.png",
-                    x: undefined,
-                    y: undefined,
-                    height: 40,
-                    width: 40,
-                    excavate: true,
-                    opacity: 1
-                  }}
-                />
+          <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="relative p-1 bg-white rounded-[3rem] shadow-2xl border border-rose-100 max-w-sm mx-auto overflow-hidden">
+              {/* Decorative corners for QR */}
+              <div className="absolute top-4 left-4 w-8 h-8 border-t-4 border-l-4 border-rose-200 rounded-tl-xl" />
+              <div className="absolute top-4 right-4 w-8 h-8 border-t-4 border-r-4 border-rose-200 rounded-tr-xl" />
+              <div className="absolute bottom-4 left-4 w-8 h-8 border-b-4 border-l-4 border-rose-200 rounded-bl-xl" />
+              <div className="absolute bottom-4 right-4 w-8 h-8 border-b-4 border-r-4 border-rose-200 rounded-br-xl" />
+
+              <div className="p-10">
+                <p className="text-[10px] text-rose-400 font-black uppercase tracking-[0.3em] mb-6">Tu Pase de Acceso</p>
+                
+                <div ref={qrRef} className="flex justify-center mb-8 p-4 bg-rose-50/50 rounded-2xl border border-rose-100/50">
+                  <QRCodeCanvas 
+                    value={verificationUrl} 
+                    size={220} 
+                    level="H" 
+                    includeMargin={false}
+                    fgColor="#881337"
+                    imageSettings={{
+                      src: "/attached_assets/generated_images/elegant_rose_gold_quinceañera_emblem.png",
+                      x: undefined,
+                      y: undefined,
+                      height: 44,
+                      width: 44,
+                      excavate: true,
+                      opacity: 1
+                    }}
+                  />
+                </div>
+                
+                <div className="space-y-2 mb-8">
+                  <p className="font-serif text-xl text-rose-950 font-bold">{guest.name}</p>
+                  <p className="text-xs text-gray-400 font-medium">Presenta este código al llegar</p>
+                </div>
+
+                <Button 
+                  onClick={downloadQR} 
+                  className="w-full bg-rose-600 hover:bg-rose-700 text-white rounded-2xl py-6 text-sm font-bold shadow-lg shadow-rose-200 transition-all active:scale-95 flex gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Descargar Pase Digital
+                </Button>
               </div>
-              <p className="text-xs text-gray-400 mb-6 font-sans">Presenta este código al llegar al evento para validar tus lugares</p>
-              <Button 
-                onClick={downloadQR} 
-                className="w-full bg-rose-600 hover:bg-rose-700 text-white gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Descargar Código QR
-              </Button>
             </div>
           </div>
         )}
 
-        <p className="mt-8 text-sm text-gray-500 bg-rose-50 p-4 rounded-lg border border-rose-100">
-          ¿Tienes dudas o necesitas cambiar tu respuesta? <br />
-          Comunícate por llamada o WhatsApp al: <br />
-          <a href="https://wa.me/18498171236" className="font-bold text-rose-700 hover:underline">
-            +1 (849) 817-1236
+        <p className="mt-8 text-[11px] text-gray-400 bg-white/50 backdrop-blur-sm p-6 rounded-2xl border border-rose-100 max-w-sm mx-auto">
+          ¿Dudas o cambios? <br />
+          <a href="https://wa.me/18498171236" className="font-bold text-rose-600 hover:underline mt-1 inline-block">
+            Contactar por WhatsApp
           </a>
         </p>
       </div>
