@@ -43,11 +43,15 @@ export default function Checklist() {
     buttons.forEach(btn => (btn as HTMLElement).style.display = 'none');
 
     try {
+      // Small delay to ensure buttons are hidden
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        windowWidth: 1200 // Use a fixed width for capture to ensure desktop-like layout in PDF
       });
       
       const imgData = canvas.toDataURL('image/png');
@@ -60,87 +64,91 @@ export default function Checklist() {
       pdf.save(`lista-invitados-mj.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
+      alert('Hubo un error al generar el PDF. Por favor intenta de nuevo.');
     } finally {
-      buttons.forEach(btn => (btn as HTMLElement).style.display = 'flex');
+      buttons.forEach(btn => (btn as HTMLElement).style.display = '');
     }
   };
 
   return (
-    <div className="min-h-screen bg-white p-8 max-w-4xl mx-auto print:p-0">
-      <div className="flex justify-between items-center mb-8 print:hidden no-export">
-        <h1 className="font-serif text-3xl text-rose-900">Checklist de Invitados</h1>
-        <div className="flex gap-4">
-          <Button onClick={handleDownloadPDF} variant="outline" className="border-rose-200 text-rose-700 hover:bg-rose-50 gap-2">
+    <div className="min-h-screen bg-white p-4 sm:p-8 max-w-4xl mx-auto print:p-0">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 print:hidden no-export">
+        <h1 className="font-serif text-2xl sm:text-3xl text-rose-900">Checklist de Invitados</h1>
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <Button onClick={handleDownloadPDF} variant="outline" className="w-full sm:w-auto border-rose-200 text-rose-700 hover:bg-rose-50 gap-2">
             <Download className="w-4 h-4" />
             Descargar PDF
           </Button>
-          <Button onClick={handlePrint} className="bg-rose-600 hover:bg-rose-700 text-white gap-2">
+          <Button onClick={handlePrint} className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white gap-2">
             <Printer className="w-4 h-4" />
             Imprimir Lista
           </Button>
         </div>
       </div>
 
-      <div id="checklist-content" className="border-4 border-rose-100 p-8 rounded-3xl relative overflow-hidden bg-rose-50/30">
+      <div id="checklist-content" className="border-2 sm:border-4 border-rose-100 p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden bg-rose-50/30">
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 p-4 opacity-10">
+        <div className="absolute top-0 right-0 p-4 opacity-10 hidden sm:block">
           <span className="font-script text-9xl">MJ</span>
         </div>
 
-        <div className="text-center mb-12">
-          <h2 className="font-script text-6xl text-rose-600 mb-2">María José</h2>
-          <p className="font-serif text-xl text-rose-800 uppercase tracking-widest">Lista de Acceso - XV Años</p>
-          <div className="w-32 h-1 bg-rose-200 mx-auto mt-4 rounded-full" />
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="font-script text-4xl sm:text-6xl text-rose-600 mb-2">María José</h2>
+          <p className="font-serif text-lg sm:text-xl text-rose-800 uppercase tracking-widest">Lista de Acceso</p>
+          <div className="w-24 sm:w-32 h-1 bg-rose-200 mx-auto mt-4 rounded-full" />
           
-          <div className="flex justify-center gap-8 mt-6">
+          <div className="flex justify-center gap-4 sm:gap-8 mt-6">
             <div className="flex items-center gap-2 text-rose-700">
-              <Users className="w-5 h-5" />
-              <span className="font-bold">{confirmedGuests.length} Grupos</span>
+              <Users className="w-4 h-4 sm:w-5 h-5" />
+              <span className="font-bold text-sm sm:text-base">{confirmedGuests.length} Grupos</span>
             </div>
             <div className="flex items-center gap-2 text-rose-700">
-              <CheckSquare className="w-5 h-5" />
-              <span className="font-bold">{totalSeats} Invitados Totales</span>
+              <CheckSquare className="w-4 h-4 sm:w-5 h-5" />
+              <span className="font-bold text-sm sm:text-base">{totalSeats} Invitados</span>
             </div>
           </div>
         </div>
 
-        <div className="space-y-4">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b-2 border-rose-200">
-                <th className="py-4 font-serif text-lg text-rose-900 w-16 text-center">Check</th>
-                <th className="py-4 font-serif text-lg text-rose-900">Nombre del Invitado</th>
-                <th className="py-4 font-serif text-lg text-rose-900 text-center">Lugares</th>
-                <th className="py-4 font-serif text-lg text-rose-900">Notas / Firma</th>
-              </tr>
-            </thead>
-            <tbody>
-              {confirmedGuests.length > 0 ? (
-                confirmedGuests.map((guest, index) => (
-                  <tr key={guest.id} className="border-b border-rose-100 hover:bg-rose-50/50 transition-colors">
-                    <td className="py-4 text-center">
-                      <div className="w-6 h-6 border-2 border-rose-300 rounded mx-auto" />
-                    </td>
-                    <td className="py-4 font-sans text-gray-800 font-medium">
-                      {guest.name}
-                    </td>
-                    <td className="py-4 text-center font-bold text-rose-700">
-                      {guest.confirmedSeats}
-                    </td>
-                    <td className="py-4 text-gray-400 italic text-sm">
-                      _______________________
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <div className="inline-block min-w-full align-middle">
+            <table className="min-w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b-2 border-rose-200">
+                  <th className="py-3 px-2 sm:py-4 font-serif text-base sm:text-lg text-rose-900 w-12 sm:w-16 text-center">✓</th>
+                  <th className="py-3 px-2 sm:py-4 font-serif text-base sm:text-lg text-rose-900">Invitado</th>
+                  <th className="py-3 px-2 sm:py-4 font-serif text-base sm:text-lg text-rose-900 text-center">Lug.</th>
+                  <th className="py-3 px-2 sm:py-4 font-serif text-base sm:text-lg text-rose-900 hidden sm:table-cell">Notas / Firma</th>
+                </tr>
+              </thead>
+              <tbody>
+                {confirmedGuests.length > 0 ? (
+                  confirmedGuests.map((guest, index) => (
+                    <tr key={guest.id} className="border-b border-rose-100 hover:bg-rose-50/50 transition-colors">
+                      <td className="py-3 sm:py-4 text-center">
+                        <div className="w-5 h-5 sm:w-6 h-6 border-2 border-rose-300 rounded mx-auto" />
+                      </td>
+                      <td className="py-3 px-2 sm:py-4 font-sans text-gray-800 font-medium text-sm sm:text-base">
+                        {guest.name}
+                        <div className="sm:hidden mt-1 text-[10px] text-gray-400 italic">____________________</div>
+                      </td>
+                      <td className="py-3 px-2 sm:py-4 text-center font-bold text-rose-700 text-sm sm:text-base">
+                        {guest.confirmedSeats}
+                      </td>
+                      <td className="py-3 px-2 sm:py-4 text-gray-400 italic text-sm hidden sm:table-cell">
+                        _______________________
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="py-12 text-center text-gray-500 italic">
+                      Aún no hay invitados confirmados.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={4} className="py-12 text-center text-gray-500 italic">
-                    Aún no hay invitados confirmados.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div className="mt-12 text-center text-xs text-rose-300 uppercase tracking-widest print:mt-20">

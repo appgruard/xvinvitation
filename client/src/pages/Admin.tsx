@@ -128,16 +128,16 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-gray-50 p-8 font-sans">
       <div className="max-w-6xl mx-auto space-y-8">
-        <header className="flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <h1 className="text-3xl font-bold text-gray-800">Panel de Administración</h1>
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Panel de Administración</h1>
             <Link href="/admin/checklist">
-              <Button variant="outline" className="gap-2 text-rose-600 border-rose-200 hover:bg-rose-50">
+              <Button variant="outline" className="w-full sm:w-auto gap-2 text-rose-600 border-rose-200 hover:bg-rose-50">
                 <FileText className="w-4 h-4" /> Checklist de Invitados
               </Button>
             </Link>
           </div>
-          <Button variant="outline" onClick={() => setIsAuthenticated(false)}>Salir</Button>
+          <Button variant="outline" className="w-full sm:w-auto" onClick={() => setIsAuthenticated(false)}>Salir</Button>
         </header>
 
         <div className="grid md:grid-cols-3 gap-6">
