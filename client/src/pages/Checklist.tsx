@@ -27,19 +27,31 @@ export default function Checklist() {
   const totalSeats = confirmedGuests.reduce((acc, g) => acc + (g.confirmedSeats || 0), 0);
 
   const handlePrint = () => {
-    window.print();
+    // Force a small delay to ensure any dynamic content is settled
+    setTimeout(() => {
+      window.print();
+    }, 250);
   };
 
   const handleDownloadPDF = () => {
     try {
+      // Access jspdf from the global scope as loaded by the CDN script in index.html
       // @ts-ignore
-      const jspdfLib = window.jspdf;
-      if (!jspdfLib || !jspdfLib.jsPDF) {
-        alert("Las herramientas de PDF se están cargando. Por favor espera un momento e intenta de nuevo. Si el problema persiste, usa el botón de Imprimir.");
-        return;
+      const { jsPDF } = window.jspdf || {};
+      
+      if (!jsPDF) {
+        console.error("jsPDF not found in window.jspdf");
+        // Try fallback to just window.jsPDF if it was loaded differently
+        // @ts-ignore
+        const fallbackJsPDF = window.jsPDF;
+        if (!fallbackJsPDF) {
+          alert("Las herramientas de PDF aún se están cargando. Por favor, intenta de nuevo en unos segundos o usa el botón de Imprimir.");
+          return;
+        }
       }
 
-      const doc = new jspdfLib.jsPDF();
+      const Lib = jsPDF || (window as any).jsPDF;
+      const doc = new Lib();
       
       // Header
       doc.setFontSize(22);
@@ -61,12 +73,12 @@ export default function Checklist() {
         "_______________________"
       ]);
 
-      // Check for autoTable on the document instance or globally
+      // Access autoTable from the doc instance or window
       // @ts-ignore
-      const autoTable = doc.autoTable || window.autoTable;
+      const autoTableFunc = doc.autoTable || window.autoTable || (window.jspdf && window.jspdf.autoTable);
 
-      if (typeof autoTable === 'function') {
-        autoTable(doc, {
+      if (typeof autoTableFunc === 'function') {
+        autoTableFunc(doc, {
           startY: 45,
           head: [['Check', 'Invitado', 'Lugares', 'Notas / Firma']],
           body: tableData,
@@ -92,13 +104,14 @@ export default function Checklist() {
         confirmedGuests.forEach(g => {
           doc.text(`[ ] ${g.name} - ${g.confirmedSeats} lug.`, 20, y);
           y += 10;
+          if (y > 280) { doc.addPage(); y = 20; }
         });
       }
 
       doc.save(`lista-invitados-mj.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Error al generar el PDF. Por favor, usa el botón de Imprimir y elige "Guardar como PDF".');
+      alert('Hubo un problema al generar el PDF. Por favor, usa el botón de Imprimir y elige "Guardar como PDF" en tu navegador.');
     }
   };
 
