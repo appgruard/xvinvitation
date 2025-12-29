@@ -3,11 +3,31 @@ import { CheckSquare, Printer, Users, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useEffect, useState } from "react";
 
 export default function Checklist() {
-  const { guests } = useStore();
-  // We use the status directly from the guest object since confirmations are integrated in mockup mode
-  const confirmedGuests = guests.filter(g => g.status === "confirmed");
+  const { guests } = useStore() as any;
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [localGuests, setLocalGuests] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const res = await fetch("/api/admin/guests");
+        if (res.ok) {
+          const data = await res.json();
+          setLocalGuests(data);
+          setDataLoaded(true);
+        }
+      } catch (error) {
+        console.error("Error loading checklist data:", error);
+      }
+    };
+    loadData();
+  }, []);
+
+  // We use the local guests from API since the store doesn't have the full list
+  const confirmedGuests = localGuests.filter(g => g.status === "confirmed");
   const totalSeats = confirmedGuests.reduce((acc, g) => acc + (g.confirmedSeats || 0), 0);
 
   const handlePrint = () => {
