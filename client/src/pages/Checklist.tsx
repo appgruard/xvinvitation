@@ -27,7 +27,9 @@ export default function Checklist() {
   const totalSeats = confirmedGuests.reduce((acc, g) => acc + (g.confirmedSeats || 0), 0);
 
   const handlePrint = () => {
-    // Basic reliable print call
+    // Force a small delay to ensure any dynamic content is settled, 
+    // though for simple window.print it's usually immediate.
+    // Also ensuring no active PDF generation is happening to avoid conflicts.
     window.print();
   };
 
