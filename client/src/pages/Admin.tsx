@@ -15,9 +15,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Copy, Plus, Trash2 } from "lucide-react";
+import { Copy, Plus, Trash2, FileText } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Link } from "wouter";
 
 export default function Admin() {
   const [password, setPassword] = useState("");
@@ -128,7 +129,14 @@ export default function Admin() {
     <div className="min-h-screen bg-gray-50 p-8 font-sans">
       <div className="max-w-6xl mx-auto space-y-8">
         <header className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">Panel de Administración</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-3xl font-bold text-gray-800">Panel de Administración</h1>
+            <Link href="/admin/checklist">
+              <Button variant="outline" className="gap-2 text-rose-600 border-rose-200 hover:bg-rose-50">
+                <FileText className="w-4 h-4" /> Checklist de Invitados
+              </Button>
+            </Link>
+          </div>
           <Button variant="outline" onClick={() => setIsAuthenticated(false)}>Salir</Button>
         </header>
 

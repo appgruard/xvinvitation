@@ -8,6 +8,7 @@ import Invitation from "@/pages/Invitation";
 import Admin from "@/pages/Admin";
 import Landing from "@/pages/Landing";
 import Verify from "@/pages/Verify";
+import Checklist from "@/pages/Checklist";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/invitacion/:id" component={Invitation} />
       <Route path="/verificar/:id" component={Verify} />
       <Route path="/admin" component={Admin} />
+      <Route path="/admin/checklist" component={Checklist} />
       <Route component={NotFound} />
     </Switch>
   );
