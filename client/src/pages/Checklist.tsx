@@ -1,6 +1,8 @@
 import { useStore } from "@/lib/store";
-import { CheckSquare, Printer, Users } from "lucide-react";
+import { CheckSquare, Printer, Users, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export default function Checklist() {
   const { guests } = useStore();
@@ -12,17 +14,54 @@ export default function Checklist() {
     window.print();
   };
 
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('checklist-content');
+    if (!element) return;
+
+    // Temporarily hide buttons for the capture
+    const buttons = document.querySelectorAll('.no-export');
+    buttons.forEach(btn => (btn as HTMLElement).style.display = 'none');
+
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`lista-invitados-mj.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    } finally {
+      buttons.forEach(btn => (btn as HTMLElement).style.display = 'flex');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white p-8 max-w-4xl mx-auto print:p-0">
-      <div className="flex justify-between items-center mb-8 print:hidden">
+      <div className="flex justify-between items-center mb-8 print:hidden no-export">
         <h1 className="font-serif text-3xl text-rose-900">Checklist de Invitados</h1>
-        <Button onClick={handlePrint} className="bg-rose-600 hover:bg-rose-700 text-white gap-2">
-          <Printer className="w-4 h-4" />
-          Imprimir Lista
-        </Button>
+        <div className="flex gap-4">
+          <Button onClick={handleDownloadPDF} variant="outline" className="border-rose-200 text-rose-700 hover:bg-rose-50 gap-2">
+            <Download className="w-4 h-4" />
+            Descargar PDF
+          </Button>
+          <Button onClick={handlePrint} className="bg-rose-600 hover:bg-rose-700 text-white gap-2">
+            <Printer className="w-4 h-4" />
+            Imprimir Lista
+          </Button>
+        </div>
       </div>
 
-      <div className="border-4 border-rose-100 p-8 rounded-3xl relative overflow-hidden bg-rose-50/30">
+      <div id="checklist-content" className="border-4 border-rose-100 p-8 rounded-3xl relative overflow-hidden bg-rose-50/30">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <span className="font-script text-9xl">MJ</span>
