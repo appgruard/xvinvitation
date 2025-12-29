@@ -1,8 +1,8 @@
 import { useStore } from "@/lib/store";
 import { CheckSquare, Printer, Users, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import { useEffect, useState } from "react";
 
 export default function Checklist() {
@@ -50,38 +50,49 @@ export default function Checklist() {
       doc.text(`Total Grupos: ${confirmedGuests.length} | Total Invitados: ${totalSeats}`, 105, 38, { align: "center" });
       
       // Table
-      const tableData = confirmedGuests.map((guest, index) => [
+      const tableData = confirmedGuests.map((guest) => [
         "[  ]", // Checkbox placeholder
         guest.name,
         guest.confirmedSeats,
         "_______________________"
       ]);
 
-      // @ts-ignore - autoTable is attached to jsPDF instance or imported
-      (doc as any).autoTable({
-        startY: 45,
-        head: [['Check', 'Invitado', 'Lugares', 'Notas / Firma']],
-        body: tableData,
-        headStyles: { 
-          fillColor: [159, 18, 57],
-          textColor: [255, 255, 255],
-          fontStyle: 'bold'
-        },
-        columnStyles: {
-          0: { cellWidth: 20, halign: 'center' },
-          2: { cellWidth: 20, halign: 'center' },
-          3: { cellWidth: 50 }
-        },
-        styles: {
-          font: "helvetica",
-          fontSize: 10
-        }
-      });
+      // @ts-ignore
+      if (doc.autoTable) {
+        // @ts-ignore
+        doc.autoTable({
+          startY: 45,
+          head: [['Check', 'Invitado', 'Lugares', 'Notas / Firma']],
+          body: tableData,
+          headStyles: { 
+            fillColor: [159, 18, 57],
+            textColor: [255, 255, 255],
+            fontStyle: 'bold'
+          },
+          columnStyles: {
+            0: { cellWidth: 20, halign: 'center' },
+            2: { cellWidth: 20, halign: 'center' },
+            3: { cellWidth: 50 }
+          },
+          styles: {
+            font: "helvetica",
+            fontSize: 10
+          }
+        });
+      } else {
+        // Fallback if plugin is not correctly attached
+        let y = 50;
+        doc.setFontSize(12);
+        confirmedGuests.forEach(g => {
+          doc.text(`[ ] ${g.name} - ${g.confirmedSeats} lug.`, 20, y);
+          y += 10;
+        });
+      }
 
       doc.save(`lista-invitados-mj.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Hubo un error al generar el PDF. Por favor intenta de nuevo.');
+      alert('Error técnico al generar el PDF. Por favor, intente usar el botón de Imprimir y guardarlo como PDF desde las opciones de impresión de su navegador.');
     }
   };
 
