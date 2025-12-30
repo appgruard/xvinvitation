@@ -55,6 +55,17 @@ export default function Admin() {
       alert("Por favor completa los campos");
       return;
     }
+
+    // Validación de duplicados en el frontend
+    const isDuplicate = guests.some(
+      (g) => g.name.toLowerCase().trim() === newGuest.name.toLowerCase().trim()
+    );
+
+    if (isDuplicate) {
+      alert("Ya existe un invitado con este nombre. Si deseas crearlo de nuevo, primero debes eliminar el registro anterior.");
+      return;
+    }
+
     try {
       const res = await fetch("/api/admin/guests", {
         method: "POST",
