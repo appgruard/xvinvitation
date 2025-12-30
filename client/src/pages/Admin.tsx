@@ -41,9 +41,14 @@ export default function Admin() {
       const guestsRes = await fetch("/api/admin/guests");
       if (guestsRes.ok) {
         const data = await guestsRes.json();
-        setGuests(data);
-        // Usamos los datos de los invitados directamente para las confirmaciones
-        setConfirmations(data);
+        // Forzamos la actualización de confirmaciones y ordenamos
+        const sortedData = [...data].sort((a, b) => {
+          if (a.status === 'confirmed' && b.status !== 'confirmed') return -1;
+          if (a.status !== 'confirmed' && b.status === 'confirmed') return 1;
+          return a.name.localeCompare(b.name);
+        });
+        setGuests(sortedData);
+        setConfirmations(sortedData);
       }
     } catch (error) {
       console.error("Error loading data:", error);
