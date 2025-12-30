@@ -21,7 +21,19 @@ export default function RSVP({ guest }: { guest: Guest }) {
   const qrRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async () => {
-    await submitConfirmation(guest.id, status as "confirmed" | "declined", status === "confirmed" ? parseInt(seats) : 0);
+    // Definimos el objeto qrData que el servidor espera
+    const qrData = {
+      timestamp: new Date().toISOString(),
+      guestName: guest.name,
+      seats: status === "confirmed" ? parseInt(seats) : 0
+    };
+    
+    await submitConfirmation(
+      guest.id, 
+      status as "confirmed" | "declined", 
+      status === "confirmed" ? parseInt(seats) : 0,
+      qrData
+    );
     setIsSubmitted(true);
   };
 
