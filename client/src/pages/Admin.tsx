@@ -39,9 +39,12 @@ export default function Admin() {
   const loadData = async () => {
     try {
       const guestsRes = await fetch("/api/admin/guests");
-      const confsRes = await fetch("/api/admin/confirmations");
-      if (guestsRes.ok) setGuests(await guestsRes.json());
-      if (confsRes.ok) setConfirmations(await confsRes.json());
+      if (guestsRes.ok) {
+        const data = await guestsRes.json();
+        setGuests(data);
+        // Usamos los datos de los invitados directamente para las confirmaciones
+        setConfirmations(data);
+      }
     } catch (error) {
       console.error("Error loading data:", error);
     }
@@ -122,8 +125,8 @@ export default function Admin() {
   }
 
   const totalGuests = guests.length;
-  const confirmedGuests = confirmations.filter(c => c.status === 'confirmed').length;
-  const totalSeatsConfirmed = confirmations.reduce((acc: number, c: any) => acc + (c.seatsConfirmed || 0), 0);
+  const confirmedGuestsCount = guests.filter(g => g.status === 'confirmed').length;
+  const totalSeatsConfirmed = guests.reduce((acc: number, g: any) => acc + (g.confirmedSeats || 0), 0);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 font-sans">
@@ -154,7 +157,7 @@ export default function Admin() {
               <CardTitle className="text-sm font-medium">Confirmaciones</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{confirmedGuests}</div>
+              <div className="text-2xl font-bold">{confirmedGuestsCount}</div>
             </CardContent>
           </Card>
           <Card>
@@ -204,7 +207,6 @@ export default function Admin() {
               </TableHeader>
               <TableBody>
                 {guests.map((guest) => {
-                  const conf = confirmations.find(c => c.guestId === guest.id);
                   return (
                     <TableRow key={guest.id}>
                       <TableCell className="font-medium">{guest.name}</TableCell>
@@ -216,7 +218,7 @@ export default function Admin() {
                           {guest.status === 'confirmed' ? 'Confirmado' : guest.status === 'declined' ? 'Declinado' : 'Pendiente'}
                         </span>
                       </TableCell>
-                      <TableCell>{conf ? `${conf.seatsConfirmed} / ${guest.maxSeats}` : `- / ${guest.maxSeats}`}</TableCell>
+                      <TableCell>{guest.status === 'confirmed' ? `${guest.confirmedSeats} / ${guest.maxSeats}` : `- / ${guest.maxSeats}`}</TableCell>
                       <TableCell className="text-right space-x-2">
                         <Button size="sm" variant="ghost" onClick={() => copyLink(guest.invitationId)}>
                           <Copy className="w-4 h-4 mr-2" /> Copiar
