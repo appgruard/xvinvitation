@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Copy, Plus, Trash2, FileText } from "lucide-react";
+import { Copy, Plus, Trash2, FileText, CheckCircle2 } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Link } from "wouter";
@@ -116,6 +116,45 @@ export default function Admin() {
     } catch (error) {
       console.error("Error deleting guest:", error);
       alert("Error de conexión al intentar eliminar");
+    }
+  };
+
+  const handleManualConfirm = async (guest: any) => {
+    const seats = prompt(`¿Cuántos lugares confirmar para ${guest.name}? (Máximo ${guest.maxSeats})`, guest.maxSeats.toString());
+    if (seats === null) return;
+    
+    const numSeats = parseInt(seats);
+    if (isNaN(numSeats) || numSeats < 1 || numSeats > guest.maxSeats) {
+      alert(`Por favor ingresa un número válido entre 1 y ${guest.maxSeats}`);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/confirmation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          guestId: guest.id, 
+          status: "confirmed", 
+          seatsConfirmed: numSeats,
+          qrData: {
+            timestamp: new Date().toISOString(),
+            guestName: guest.name,
+            seats: numSeats,
+            manual: true
+          }
+        })
+      });
+
+      if (res.ok) {
+        alert("Invitado confirmado manualmente");
+        loadData();
+      } else {
+        alert("Error al confirmar");
+      }
+    } catch (error) {
+      console.error("Error manual confirmation:", error);
+      alert("Error de conexión");
     }
   };
 
@@ -239,6 +278,16 @@ export default function Admin() {
                         <Button size="sm" variant="ghost" onClick={() => copyLink(guest.invitationId)}>
                           <Copy className="w-4 h-4 mr-2" /> Copiar
                         </Button>
+                        {guest.status !== 'confirmed' && (
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                            onClick={() => handleManualConfirm(guest)}
+                          >
+                            <CheckCircle2 className="w-4 h-4 mr-2" /> Confirmar
+                          </Button>
+                        )}
                         <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => handleDeleteGuest(guest.id)}>
                           <Trash2 className="w-4 h-4 mr-2" /> Eliminar
                         </Button>
