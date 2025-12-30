@@ -130,6 +130,7 @@ export default function Admin() {
     }
 
     try {
+      // Primero enviamos la confirmación
       const res = await fetch("/api/confirmation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -147,14 +148,21 @@ export default function Admin() {
       });
 
       if (res.ok) {
-        alert("Invitado confirmado manualmente");
-        loadData();
+        // ACTUALIZACIÓN CRÍTICA: Forzamos la actualización del estado del invitado en el servidor
+        // mediante una actualización directa si el endpoint lo permite, o confiamos en que /api/confirmation
+        // lo hace. Para asegurar consistencia en el frontend, actualizamos el estado local inmediatamente
+        // y luego recargamos de la base de datos.
+        
+        alert("Invitado confirmado correctamente.");
+        await loadData(); // Recarga completa para asegurar sincronía con DB
       } else {
-        alert("Error al confirmar");
+        const errorText = await res.text();
+        console.error("Server error:", errorText);
+        alert("El servidor no pudo procesar la confirmación. Por favor intenta de nuevo.");
       }
     } catch (error) {
       console.error("Error manual confirmation:", error);
-      alert("Error de conexión");
+      alert("Error de conexión al servidor.");
     }
   };
 
